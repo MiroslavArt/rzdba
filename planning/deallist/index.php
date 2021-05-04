@@ -3,7 +3,7 @@ require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
 $APPLICATION->SetTitle("Список сделок");
 ?><?$APPLICATION->IncludeComponent(
     "bitrix:crm.deal",
-    "",
+    "deals.planning",
     Array(
         "SEF_MODE" => "Y",
         "PATH_TO_CONTACT_SHOW" => "/crm/contact/show/#contact_id#/",

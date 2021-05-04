@@ -1,0 +1,7 @@
+<?
+$MESS["CRM_DEAL_WGT_CURRENT"] = "[現行パイプライン]";
+$MESS["CRM_DEAL_WGT_DEAL_CATEGORY"] = "パイプライン";
+$MESS["CRM_DEAL_WGT_NO_SELECTED"] = "未選択";
+$MESS["CRM_DEAL_WGT_PAGE_TITLE"] = "取引分析";
+$MESS["CRM_DEAL_WGT_PAGE_TITLE_SHORT"] = "取引レポート";
+?>
