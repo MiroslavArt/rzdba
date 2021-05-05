@@ -347,186 +347,198 @@ foreach($arResult['DEAL'] as $sKey =>  $arDeal)
 		ExecuteModuleEventEx($event, array('CRM_DEAL_LIST_MENU', $eventParam, &$arActions));
 	}
 
-	$resultItem = array(
-		'id' => $arDeal['ID'],
-		'actions' => $arActions,
-		'data' => $arDeal,
-		'editable' => !$arDeal['EDIT'] ? ($arResult['INTERNAL'] ? 'N' : $arColumns) : 'Y',
-		'columns' => array(
-			'DEAL_SUMMARY' => CCrmViewHelper::RenderInfo(
-				$arDeal['PATH_TO_DEAL_SHOW'],
-				isset($arDeal['TITLE']) ? $arDeal['TITLE'] : ('['.$arDeal['ID'].']'),
-				Tracking\UI\Grid::enrichSourceName(
-					\CCrmOwnerType::Deal,
-					$arDeal['ID'],
-					$arDeal['DEAL_DESCRIPTION']
-				),
-				array(
-					'TARGET' => '_top',
-					'LEGEND' => $arDeal['DEAL_LEGEND']
-				)
-			),
-			'DEAL_CLIENT' => isset($arDeal['CLIENT_INFO']) ? CCrmViewHelper::PrepareClientInfo($arDeal['CLIENT_INFO']) : '',
-			'COMPANY_ID' => isset($arDeal['COMPANY_INFO']) ? CCrmViewHelper::PrepareClientInfo($arDeal['COMPANY_INFO']) : '',
-			'CONTACT_ID' => isset($arDeal['CONTACT_INFO']) ? CCrmViewHelper::PrepareClientInfo($arDeal['CONTACT_INFO']) : '',
-			'TITLE' => '<a target="_self" href="'.$arDeal['PATH_TO_DEAL_SHOW'].'"
+
+	if(empty($arDeal['custom'])) {
+        $resultItem = array(
+            'id' => $arDeal['ID'],
+            'has_child' => $arDeal['has_child'],
+            'parent_id' => $arDeal['parent_id'],
+            'parent_group_id' => $arDeal['parent_group_id'],
+            'attrs' => $arDeal['attrs'],
+            'actions' => $arActions,
+            'data' => $arDeal,
+            'editable' => !$arDeal['EDIT'] ? ($arResult['INTERNAL'] ? 'N' : $arColumns) : 'Y',
+            'columns' => array(
+                    'DEAL_SUMMARY' => CCrmViewHelper::RenderInfo(
+                        $arDeal['PATH_TO_DEAL_SHOW'],
+                        isset($arDeal['TITLE']) ? $arDeal['TITLE'] : ('['.$arDeal['ID'].']'),
+                        Tracking\UI\Grid::enrichSourceName(
+                            \CCrmOwnerType::Deal,
+                            $arDeal['ID'],
+                            $arDeal['DEAL_DESCRIPTION']
+                        ),
+                        array(
+                            'TARGET' => '_top',
+                            'LEGEND' => $arDeal['DEAL_LEGEND']
+                        )
+                    ),
+                    'DEAL_CLIENT' => isset($arDeal['CLIENT_INFO']) ? CCrmViewHelper::PrepareClientInfo($arDeal['CLIENT_INFO']) : '',
+                    'COMPANY_ID' => isset($arDeal['COMPANY_INFO']) ? CCrmViewHelper::PrepareClientInfo($arDeal['COMPANY_INFO']) : '',
+                    'CONTACT_ID' => isset($arDeal['CONTACT_INFO']) ? CCrmViewHelper::PrepareClientInfo($arDeal['CONTACT_INFO']) : '',
+                    'TITLE' => '<a target="_self" href="'.$arDeal['PATH_TO_DEAL_SHOW'].'"
 				class="'.($arDeal['BIZPROC_STATUS'] != '' ? 'bizproc bizproc_status_'.$arDeal['BIZPROC_STATUS'] : '').'"
 				'.($arDeal['BIZPROC_STATUS_HINT'] != '' ? 'onmouseover="BX.hint(this, \''.CUtil::JSEscape($arDeal['BIZPROC_STATUS_HINT']).'\');"' : '').'>'.$arDeal['TITLE'].'</a>',
-			'CLOSED' => $arDeal['CLOSED'] == 'Y' ? GetMessage('MAIN_YES') : GetMessage('MAIN_NO'),
-			'ASSIGNED_BY' => $arDeal['~ASSIGNED_BY_ID'] > 0
-				? CCrmViewHelper::PrepareUserBaloonHtml(
-					array(
-						'PREFIX' => "DEAL_{$arDeal['~ID']}_RESPONSIBLE",
-						'USER_ID' => $arDeal['~ASSIGNED_BY_ID'],
-						'USER_NAME'=> $arDeal['ASSIGNED_BY'],
-						'USER_PROFILE_URL' => $arDeal['PATH_TO_USER_PROFILE']
-					)
-				) : '',
-			'COMMENTS' => htmlspecialcharsback($arDeal['COMMENTS']),
-			'SUM' => $arDeal['FORMATTED_OPPORTUNITY'],
-			'OPPORTUNITY' => $arDeal['OPPORTUNITY'],
-			'PROBABILITY' => "{$arDeal['PROBABILITY']}%",
-			'DATE_CREATE' => FormatDate($arResult['TIME_FORMAT'], MakeTimeStamp($arDeal['DATE_CREATE']), $now),
-			'DATE_MODIFY' => FormatDate($arResult['TIME_FORMAT'], MakeTimeStamp($arDeal['DATE_MODIFY']), $now),
-			'TYPE_ID' => isset($arResult['TYPE_LIST'][$arDeal['TYPE_ID']]) ? $arResult['TYPE_LIST'][$arDeal['TYPE_ID']] : $arDeal['TYPE_ID'],
-			'SOURCE_ID' => isset($arResult['SOURCE_LIST'][$arDeal['SOURCE_ID']]) ? $arResult['SOURCE_LIST'][$arDeal['SOURCE_ID']] : $arDeal['SOURCE_ID'],
-			'EVENT_ID' => isset($arResult['EVENT_LIST'][$arDeal['EVENT_ID']]) ? $arResult['EVENT_LIST'][$arDeal['EVENT_ID']] : $arDeal['EVENT_ID'],
-			'CURRENCY_ID' => CCrmCurrency::GetCurrencyName($arDeal['CURRENCY_ID']),
-			'PRODUCT_ID' => isset($arDeal['PRODUCT_ROWS']) ? htmlspecialcharsbx(CCrmProductRow::RowsToString($arDeal['PRODUCT_ROWS'])) : '',
-			'STATE_ID' => isset($arResult['STATE_LIST'][$arDeal['STATE_ID']]) ? $arResult['STATE_LIST'][$arDeal['STATE_ID']] : $arDeal['STATE_ID'],
-			'WEBFORM_ID' => isset($arResult['WEBFORM_LIST'][$arDeal['WEBFORM_ID']]) ? $arResult['WEBFORM_LIST'][$arDeal['WEBFORM_ID']] : $arDeal['WEBFORM_ID'],
-			'ORDER_STAGE' => CCrmViewHelper::RenderDealOrderStageControl($arDeal['ORDER_STAGE']),
-			'STAGE_ID' => CCrmViewHelper::RenderDealStageControl(
-				array(
-					'PREFIX' => "{$arResult['GRID_ID']}_PROGRESS_BAR_",
-					'ENTITY_ID' => $arDeal['~ID'],
-					'CURRENT_ID' => $arDeal['~STAGE_ID'],
-					'CATEGORY_ID' => $arDeal['~CATEGORY_ID'],
-					'SERVICE_URL' => '/bitrix/components/bitrix/crm.deal.list/list.ajax.php',
-					'READ_ONLY' => !(isset($arDeal['EDIT']) && $arDeal['EDIT'] === true)
-				)
-			),
-			'CATEGORY_ID' => $arDeal['DEAL_CATEGORY_NAME'],
-			'IS_RETURN_CUSTOMER' => $arDeal['IS_RETURN_CUSTOMER'] === 'Y' ? GetMessage('MAIN_YES') : GetMessage('MAIN_NO'),
-			'IS_REPEATED_APPROACH' => $arDeal['IS_REPEATED_APPROACH'] === 'Y' ? GetMessage('MAIN_YES') : GetMessage('MAIN_NO'),
-			'ORIGINATOR_ID' => isset($arDeal['ORIGINATOR_NAME']) ? $arDeal['ORIGINATOR_NAME'] : '',
-			'CREATED_BY' => $arDeal['~CREATED_BY'] > 0
-				? CCrmViewHelper::PrepareUserBaloonHtml(
-					array(
-						'PREFIX' => "DEAL_{$arDeal['~ID']}_CREATOR",
-						'USER_ID' => $arDeal['~CREATED_BY'],
-						'USER_NAME'=> $arDeal['CREATED_BY_FORMATTED_NAME'],
-						'USER_PROFILE_URL' => $arDeal['PATH_TO_USER_CREATOR']
-					)
-				) : '',
-			'MODIFY_BY' => $arDeal['~MODIFY_BY'] > 0
-				? CCrmViewHelper::PrepareUserBaloonHtml(
-					array(
-						'PREFIX' => "DEAL_{$arDeal['~ID']}_MODIFIER",
-						'USER_ID' => $arDeal['~MODIFY_BY'],
-						'USER_NAME'=> $arDeal['MODIFY_BY_FORMATTED_NAME'],
-						'USER_PROFILE_URL' => $arDeal['PATH_TO_USER_MODIFIER']
-					)
-				) : '',
-		) + $arResult['DEAL_UF'][$sKey]
-	);
+                    'CLOSED' => $arDeal['CLOSED'] == 'Y' ? GetMessage('MAIN_YES') : GetMessage('MAIN_NO'),
+                    'ASSIGNED_BY' => $arDeal['~ASSIGNED_BY_ID'] > 0
+                        ? CCrmViewHelper::PrepareUserBaloonHtml(
+                            array(
+                                'PREFIX' => "DEAL_{$arDeal['~ID']}_RESPONSIBLE",
+                                'USER_ID' => $arDeal['~ASSIGNED_BY_ID'],
+                                'USER_NAME'=> $arDeal['ASSIGNED_BY'],
+                                'USER_PROFILE_URL' => $arDeal['PATH_TO_USER_PROFILE']
+                            )
+                        ) : '',
+                    'COMMENTS' => htmlspecialcharsback($arDeal['COMMENTS']),
+                    'SUM' => $arDeal['FORMATTED_OPPORTUNITY'],
+                    'OPPORTUNITY' => $arDeal['OPPORTUNITY'],
+                    'PROBABILITY' => "{$arDeal['PROBABILITY']}%",
+                    'DATE_CREATE' => FormatDate($arResult['TIME_FORMAT'], MakeTimeStamp($arDeal['DATE_CREATE']), $now),
+                    'DATE_MODIFY' => FormatDate($arResult['TIME_FORMAT'], MakeTimeStamp($arDeal['DATE_MODIFY']), $now),
+                    'TYPE_ID' => isset($arResult['TYPE_LIST'][$arDeal['TYPE_ID']]) ? $arResult['TYPE_LIST'][$arDeal['TYPE_ID']] : $arDeal['TYPE_ID'],
+                    'SOURCE_ID' => isset($arResult['SOURCE_LIST'][$arDeal['SOURCE_ID']]) ? $arResult['SOURCE_LIST'][$arDeal['SOURCE_ID']] : $arDeal['SOURCE_ID'],
+                    'EVENT_ID' => isset($arResult['EVENT_LIST'][$arDeal['EVENT_ID']]) ? $arResult['EVENT_LIST'][$arDeal['EVENT_ID']] : $arDeal['EVENT_ID'],
+                    'CURRENCY_ID' => CCrmCurrency::GetCurrencyName($arDeal['CURRENCY_ID']),
+                    'PRODUCT_ID' => isset($arDeal['PRODUCT_ROWS']) ? htmlspecialcharsbx(CCrmProductRow::RowsToString($arDeal['PRODUCT_ROWS'])) : '',
+                    'STATE_ID' => isset($arResult['STATE_LIST'][$arDeal['STATE_ID']]) ? $arResult['STATE_LIST'][$arDeal['STATE_ID']] : $arDeal['STATE_ID'],
+                    'WEBFORM_ID' => isset($arResult['WEBFORM_LIST'][$arDeal['WEBFORM_ID']]) ? $arResult['WEBFORM_LIST'][$arDeal['WEBFORM_ID']] : $arDeal['WEBFORM_ID'],
+                    'ORDER_STAGE' => CCrmViewHelper::RenderDealOrderStageControl($arDeal['ORDER_STAGE']),
+                    'STAGE_ID' => CCrmViewHelper::RenderDealStageControl(
+                        array(
+                            'PREFIX' => "{$arResult['GRID_ID']}_PROGRESS_BAR_",
+                            'ENTITY_ID' => $arDeal['~ID'],
+                            'CURRENT_ID' => $arDeal['~STAGE_ID'],
+                            'CATEGORY_ID' => $arDeal['~CATEGORY_ID'],
+                            'SERVICE_URL' => '/bitrix/components/bitrix/crm.deal.list/list.ajax.php',
+                            'READ_ONLY' => !(isset($arDeal['EDIT']) && $arDeal['EDIT'] === true)
+                        )
+                    ),
+                    'CATEGORY_ID' => $arDeal['DEAL_CATEGORY_NAME'],
+                    'IS_RETURN_CUSTOMER' => $arDeal['IS_RETURN_CUSTOMER'] === 'Y' ? GetMessage('MAIN_YES') : GetMessage('MAIN_NO'),
+                    'IS_REPEATED_APPROACH' => $arDeal['IS_REPEATED_APPROACH'] === 'Y' ? GetMessage('MAIN_YES') : GetMessage('MAIN_NO'),
+                    'ORIGINATOR_ID' => isset($arDeal['ORIGINATOR_NAME']) ? $arDeal['ORIGINATOR_NAME'] : '',
+                    'CREATED_BY' => $arDeal['~CREATED_BY'] > 0
+                        ? CCrmViewHelper::PrepareUserBaloonHtml(
+                            array(
+                                'PREFIX' => "DEAL_{$arDeal['~ID']}_CREATOR",
+                                'USER_ID' => $arDeal['~CREATED_BY'],
+                                'USER_NAME'=> $arDeal['CREATED_BY_FORMATTED_NAME'],
+                                'USER_PROFILE_URL' => $arDeal['PATH_TO_USER_CREATOR']
+                            )
+                        ) : '',
+                    'MODIFY_BY' => $arDeal['~MODIFY_BY'] > 0
+                        ? CCrmViewHelper::PrepareUserBaloonHtml(
+                            array(
+                                'PREFIX' => "DEAL_{$arDeal['~ID']}_MODIFIER",
+                                'USER_ID' => $arDeal['~MODIFY_BY'],
+                                'USER_NAME'=> $arDeal['MODIFY_BY_FORMATTED_NAME'],
+                                'USER_PROFILE_URL' => $arDeal['PATH_TO_USER_MODIFIER']
+                            )
+                        ) : '',
+                ) + $arResult['DEAL_UF'][$sKey]
+        );
+        Tracking\UI\Grid::appendRows(
+            \CCrmOwnerType::Deal,
+            $arDeal['ID'],
+            $resultItem['columns']
+        );
+        $userActivityID = isset($arDeal['~ACTIVITY_ID']) ? intval($arDeal['~ACTIVITY_ID']) : 0;
+        $commonActivityID = isset($arDeal['~C_ACTIVITY_ID']) ? intval($arDeal['~C_ACTIVITY_ID']) : 0;
+        if($userActivityID > 0)
+        {
+            $resultItem['columns']['ACTIVITY_ID'] = CCrmViewHelper::RenderNearestActivity(
+                array(
+                    'ENTITY_TYPE_NAME' => CCrmOwnerType::ResolveName(CCrmOwnerType::Deal),
+                    'ENTITY_ID' => $arDeal['~ID'],
+                    'ENTITY_RESPONSIBLE_ID' => $arDeal['~ASSIGNED_BY'],
+                    'GRID_MANAGER_ID' => $gridManagerID,
+                    'ACTIVITY_ID' => $userActivityID,
+                    'ACTIVITY_SUBJECT' => isset($arDeal['~ACTIVITY_SUBJECT']) ? $arDeal['~ACTIVITY_SUBJECT'] : '',
+                    'ACTIVITY_TIME' => isset($arDeal['~ACTIVITY_TIME']) ? $arDeal['~ACTIVITY_TIME'] : '',
+                    'ACTIVITY_EXPIRED' => isset($arDeal['~ACTIVITY_EXPIRED']) ? $arDeal['~ACTIVITY_EXPIRED'] : '',
+                    'ACTIVITY_TYPE_ID' => isset($arDeal['~ACTIVITY_TYPE_ID']) ? $arDeal['~ACTIVITY_TYPE_ID'] : '',
+                    'ACTIVITY_PROVIDER_ID' => isset($arDeal['~ACTIVITY_PROVIDER_ID']) ? $arDeal['~ACTIVITY_PROVIDER_ID'] : '',
+                    'ALLOW_EDIT' => $arDeal['EDIT'],
+                    'MENU_ITEMS' => $arActivityMenuItems,
+                    'USE_GRID_EXTENSION' => true
+                )
+            );
 
-	Tracking\UI\Grid::appendRows(
-		\CCrmOwnerType::Deal,
-		$arDeal['ID'],
-		$resultItem['columns']
-	);
+            $counterData = array(
+                'CURRENT_USER_ID' => $currentUserID,
+                'ENTITY' => $arDeal,
+                'ACTIVITY' => array(
+                    'RESPONSIBLE_ID' => $currentUserID,
+                    'TIME' => isset($arDeal['~ACTIVITY_TIME']) ? $arDeal['~ACTIVITY_TIME'] : '',
+                    'IS_CURRENT_DAY' => isset($arDeal['~ACTIVITY_IS_CURRENT_DAY']) ? $arDeal['~ACTIVITY_IS_CURRENT_DAY'] : false
+                )
+            );
 
-	$userActivityID = isset($arDeal['~ACTIVITY_ID']) ? intval($arDeal['~ACTIVITY_ID']) : 0;
-	$commonActivityID = isset($arDeal['~C_ACTIVITY_ID']) ? intval($arDeal['~C_ACTIVITY_ID']) : 0;
-	if($userActivityID > 0)
-	{
-		$resultItem['columns']['ACTIVITY_ID'] = CCrmViewHelper::RenderNearestActivity(
-			array(
-				'ENTITY_TYPE_NAME' => CCrmOwnerType::ResolveName(CCrmOwnerType::Deal),
-				'ENTITY_ID' => $arDeal['~ID'],
-				'ENTITY_RESPONSIBLE_ID' => $arDeal['~ASSIGNED_BY'],
-				'GRID_MANAGER_ID' => $gridManagerID,
-				'ACTIVITY_ID' => $userActivityID,
-				'ACTIVITY_SUBJECT' => isset($arDeal['~ACTIVITY_SUBJECT']) ? $arDeal['~ACTIVITY_SUBJECT'] : '',
-				'ACTIVITY_TIME' => isset($arDeal['~ACTIVITY_TIME']) ? $arDeal['~ACTIVITY_TIME'] : '',
-				'ACTIVITY_EXPIRED' => isset($arDeal['~ACTIVITY_EXPIRED']) ? $arDeal['~ACTIVITY_EXPIRED'] : '',
-				'ACTIVITY_TYPE_ID' => isset($arDeal['~ACTIVITY_TYPE_ID']) ? $arDeal['~ACTIVITY_TYPE_ID'] : '',
-				'ACTIVITY_PROVIDER_ID' => isset($arDeal['~ACTIVITY_PROVIDER_ID']) ? $arDeal['~ACTIVITY_PROVIDER_ID'] : '',
-				'ALLOW_EDIT' => $arDeal['EDIT'],
-				'MENU_ITEMS' => $arActivityMenuItems,
-				'USE_GRID_EXTENSION' => true
-			)
-		);
+            if(CCrmUserCounter::IsReckoned(CCrmUserCounter::CurrentDealActivies, $counterData))
+            {
+                $resultItem['columnClasses'] = array('ACTIVITY_ID' => 'crm-list-deal-today');
+            }
+        }
+        elseif($commonActivityID > 0)
+        {
+            $resultItem['columns']['ACTIVITY_ID'] = CCrmViewHelper::RenderNearestActivity(
+                array(
+                    'ENTITY_TYPE_NAME' => CCrmOwnerType::ResolveName(CCrmOwnerType::Deal),
+                    'ENTITY_ID' => $arDeal['~ID'],
+                    'ENTITY_RESPONSIBLE_ID' => $arDeal['~ASSIGNED_BY'],
+                    'GRID_MANAGER_ID' => $gridManagerID,
+                    'ACTIVITY_ID' => $commonActivityID,
+                    'ACTIVITY_SUBJECT' => isset($arDeal['~C_ACTIVITY_SUBJECT']) ? $arDeal['~C_ACTIVITY_SUBJECT'] : '',
+                    'ACTIVITY_TIME' => isset($arDeal['~C_ACTIVITY_TIME']) ? $arDeal['~C_ACTIVITY_TIME'] : '',
+                    'ACTIVITY_RESPONSIBLE_ID' => isset($arDeal['~C_ACTIVITY_RESP_ID']) ? intval($arDeal['~C_ACTIVITY_RESP_ID']) : 0,
+                    'ACTIVITY_RESPONSIBLE_LOGIN' => isset($arDeal['~C_ACTIVITY_RESP_LOGIN']) ? $arDeal['~C_ACTIVITY_RESP_LOGIN'] : '',
+                    'ACTIVITY_RESPONSIBLE_NAME' => isset($arDeal['~C_ACTIVITY_RESP_NAME']) ? $arDeal['~C_ACTIVITY_RESP_NAME'] : '',
+                    'ACTIVITY_RESPONSIBLE_LAST_NAME' => isset($arDeal['~C_ACTIVITY_RESP_LAST_NAME']) ? $arDeal['~C_ACTIVITY_RESP_LAST_NAME'] : '',
+                    'ACTIVITY_RESPONSIBLE_SECOND_NAME' => isset($arDeal['~C_ACTIVITY_RESP_SECOND_NAME']) ? $arDeal['~C_ACTIVITY_RESP_SECOND_NAME'] : '',
+                    'ACTIVITY_TYPE_ID' => isset($arDeal['~C_ACTIVITY_TYPE_ID']) ? $arDeal['~C_ACTIVITY_TYPE_ID'] : '',
+                    'ACTIVITY_PROVIDER_ID' => isset($arDeal['~C_ACTIVITY_PROVIDER_ID']) ? $arDeal['~C_ACTIVITY_PROVIDER_ID'] : '',
+                    'NAME_TEMPLATE' => $arParams['NAME_TEMPLATE'],
+                    'PATH_TO_USER_PROFILE' => $arParams['PATH_TO_USER_PROFILE'],
+                    'ALLOW_EDIT' => $arDeal['EDIT'],
+                    'MENU_ITEMS' => $arActivityMenuItems,
+                    'USE_GRID_EXTENSION' => true
+                )
+            );
+        }
+        else
+        {
+            $resultItem['columns']['ACTIVITY_ID'] = CCrmViewHelper::RenderNearestActivity(
+                array(
+                    'ENTITY_TYPE_NAME' => CCrmOwnerType::ResolveName(CCrmOwnerType::Deal),
+                    'ENTITY_ID' => $arDeal['~ID'],
+                    'ENTITY_RESPONSIBLE_ID' => $arDeal['~ASSIGNED_BY'],
+                    'GRID_MANAGER_ID' => $gridManagerID,
+                    'ALLOW_EDIT' => $arDeal['EDIT'],
+                    'MENU_ITEMS' => $arActivityMenuItems,
+                    'HINT_TEXT' => isset($arDeal['~WAITING_TITLE']) ? $arDeal['~WAITING_TITLE'] : '',
+                    'USE_GRID_EXTENSION' => true
+                )
+            );
 
-		$counterData = array(
-			'CURRENT_USER_ID' => $currentUserID,
-			'ENTITY' => $arDeal,
-			'ACTIVITY' => array(
-				'RESPONSIBLE_ID' => $currentUserID,
-				'TIME' => isset($arDeal['~ACTIVITY_TIME']) ? $arDeal['~ACTIVITY_TIME'] : '',
-				'IS_CURRENT_DAY' => isset($arDeal['~ACTIVITY_IS_CURRENT_DAY']) ? $arDeal['~ACTIVITY_IS_CURRENT_DAY'] : false
-			)
-		);
+            $counterData = array('CURRENT_USER_ID' => $currentUserID, 'ENTITY' => $arDeal);
+            if($waitingID <= 0
+                && CCrmUserCounter::IsReckoned(CCrmUserCounter::CurrentDealActivies, $counterData)
+            )
+            {
+                $resultItem['columnClasses'] = array('ACTIVITY_ID' => 'crm-list-enitity-action-need');
+            }
+        }
+        $arResult['GRID_DATA'][] = &$resultItem;
+        unset($resultItem);
+    } else {
+        $resultItem = $arDeal;
+        $arResult['GRID_DATA'][] = &$resultItem;
+        unset($resultItem);
+    }
 
-		if(CCrmUserCounter::IsReckoned(CCrmUserCounter::CurrentDealActivies, $counterData))
-		{
-			$resultItem['columnClasses'] = array('ACTIVITY_ID' => 'crm-list-deal-today');
-		}
-	}
-	elseif($commonActivityID > 0)
-	{
-		$resultItem['columns']['ACTIVITY_ID'] = CCrmViewHelper::RenderNearestActivity(
-			array(
-				'ENTITY_TYPE_NAME' => CCrmOwnerType::ResolveName(CCrmOwnerType::Deal),
-				'ENTITY_ID' => $arDeal['~ID'],
-				'ENTITY_RESPONSIBLE_ID' => $arDeal['~ASSIGNED_BY'],
-				'GRID_MANAGER_ID' => $gridManagerID,
-				'ACTIVITY_ID' => $commonActivityID,
-				'ACTIVITY_SUBJECT' => isset($arDeal['~C_ACTIVITY_SUBJECT']) ? $arDeal['~C_ACTIVITY_SUBJECT'] : '',
-				'ACTIVITY_TIME' => isset($arDeal['~C_ACTIVITY_TIME']) ? $arDeal['~C_ACTIVITY_TIME'] : '',
-				'ACTIVITY_RESPONSIBLE_ID' => isset($arDeal['~C_ACTIVITY_RESP_ID']) ? intval($arDeal['~C_ACTIVITY_RESP_ID']) : 0,
-				'ACTIVITY_RESPONSIBLE_LOGIN' => isset($arDeal['~C_ACTIVITY_RESP_LOGIN']) ? $arDeal['~C_ACTIVITY_RESP_LOGIN'] : '',
-				'ACTIVITY_RESPONSIBLE_NAME' => isset($arDeal['~C_ACTIVITY_RESP_NAME']) ? $arDeal['~C_ACTIVITY_RESP_NAME'] : '',
-				'ACTIVITY_RESPONSIBLE_LAST_NAME' => isset($arDeal['~C_ACTIVITY_RESP_LAST_NAME']) ? $arDeal['~C_ACTIVITY_RESP_LAST_NAME'] : '',
-				'ACTIVITY_RESPONSIBLE_SECOND_NAME' => isset($arDeal['~C_ACTIVITY_RESP_SECOND_NAME']) ? $arDeal['~C_ACTIVITY_RESP_SECOND_NAME'] : '',
-				'ACTIVITY_TYPE_ID' => isset($arDeal['~C_ACTIVITY_TYPE_ID']) ? $arDeal['~C_ACTIVITY_TYPE_ID'] : '',
-				'ACTIVITY_PROVIDER_ID' => isset($arDeal['~C_ACTIVITY_PROVIDER_ID']) ? $arDeal['~C_ACTIVITY_PROVIDER_ID'] : '',
-				'NAME_TEMPLATE' => $arParams['NAME_TEMPLATE'],
-				'PATH_TO_USER_PROFILE' => $arParams['PATH_TO_USER_PROFILE'],
-				'ALLOW_EDIT' => $arDeal['EDIT'],
-				'MENU_ITEMS' => $arActivityMenuItems,
-				'USE_GRID_EXTENSION' => true
-			)
-		);
-	}
-	else
-	{
-		$resultItem['columns']['ACTIVITY_ID'] = CCrmViewHelper::RenderNearestActivity(
-			array(
-				'ENTITY_TYPE_NAME' => CCrmOwnerType::ResolveName(CCrmOwnerType::Deal),
-				'ENTITY_ID' => $arDeal['~ID'],
-				'ENTITY_RESPONSIBLE_ID' => $arDeal['~ASSIGNED_BY'],
-				'GRID_MANAGER_ID' => $gridManagerID,
-				'ALLOW_EDIT' => $arDeal['EDIT'],
-				'MENU_ITEMS' => $arActivityMenuItems,
-				'HINT_TEXT' => isset($arDeal['~WAITING_TITLE']) ? $arDeal['~WAITING_TITLE'] : '',
-				'USE_GRID_EXTENSION' => true
-			)
-		);
 
-		$counterData = array('CURRENT_USER_ID' => $currentUserID, 'ENTITY' => $arDeal);
-		if($waitingID <= 0
-			&& CCrmUserCounter::IsReckoned(CCrmUserCounter::CurrentDealActivies, $counterData)
-		)
-		{
-			$resultItem['columnClasses'] = array('ACTIVITY_ID' => 'crm-list-enitity-action-need');
-		}
-	}
-
-	$arResult['GRID_DATA'][] = &$resultItem;
-	unset($resultItem);
 }
+\Bitrix\Main\Diag\Debug::writeToFile($arResult['GRID_DATA'], "gridrrr", "__miros.log");
+
 $APPLICATION->IncludeComponent('bitrix:main.user.link',
 	'',
 	array(
@@ -1009,7 +1021,7 @@ $APPLICATION->IncludeComponent(
 	),
 	$component
 );
-
+//\Bitrix\Main\Diag\Debug::writeToFile($arResult['GRID_DATA'], "arresultgd", "__miros.log");
 $APPLICATION->IncludeComponent(
 	'bitrix:crm.interface.grid',
 	'titleflex',
@@ -1037,7 +1049,8 @@ $APPLICATION->IncludeComponent(
 		'LIVE_SEARCH_LIMIT_INFO' => isset($arResult['LIVE_SEARCH_LIMIT_INFO'])
 			? $arResult['LIVE_SEARCH_LIMIT_INFO'] : null,
 		'ENABLE_LIVE_SEARCH' => true,
-		'ACTION_PANEL' => $controlPanel,
+		'ENABLE_COLLAPSIBLE_ROWS' => true,
+		//'ACTION_PANEL' => $controlPanel,
 		'PAGINATION' => isset($arResult['PAGINATION']) && is_array($arResult['PAGINATION'])
 			? $arResult['PAGINATION'] : array(),
 		'ENABLE_ROW_COUNT_LOADER' => true,
