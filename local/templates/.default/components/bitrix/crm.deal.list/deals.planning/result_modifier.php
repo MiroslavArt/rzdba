@@ -14,14 +14,15 @@ $groupdeal = [
     'group_id' => 50,
     'parent_id' => 0,
     'has_child' => true,
-    'not_count' => true,
+    'not_count' => false,
     'draggable' => false,
+    'expand' => false,
     'custom' => "<div class='tasks-grid-wrapper'>Проект 1</div>",
     'attrs' => [
         'data-type' => 'group',
         'data-group-id' => 50,
-        'data-can-create-tasks' => true,
-        'data-can-edit-tasks' => true
+        'data-can-create-tasks' => '',
+        'data-can-edit-tasks' => ''
     ]
 ];
 $arResult['DEAL'] = [];
@@ -37,7 +38,7 @@ foreach ($deals as &$deal) {
             'data-can-edit' => true,
             'data-pinned' => 'N'
         ];
-        $deal['expand'] = true;
+        $deal['expand'] = false;
         $arResult['DEAL'][$deal['ID']] = $deal;
     }
 
@@ -48,8 +49,9 @@ foreach ($deals as &$deal) {
                 'group_id' => 51,
                 'parent_id' => 0,
                 'has_child' => true,
-                'not_count' => true,
+                'not_count' => false,
                 'draggable' => false,
+                'expand' => false,
                 'custom' => "<div class='tasks-grid-wrapper'>Проект 2</div>",
                 'attrs' => [
                     'data-type' => 'group',
@@ -61,13 +63,15 @@ foreach ($deals as &$deal) {
             $arResult['DEAL']['group_51'] = $groupdeal;
         }
         $deal['parent_group_id'] = '51';
+        $deal['group_id'] = '51';
+        $deal['expand'] = false;
         $deal['attrs'] = [
             'data-type' => 'task',
             'data-group-id' => 51,
             'data-can-edit' => true,
             'data-pinned' => 'N'
         ];
-        $deal['expand'] = true;
+
         $arResult['DEAL'][$deal['ID']] = $deal;
     }
     /*else {
@@ -102,7 +106,7 @@ foreach ($deals as &$deal) {
     }*/
 }
 
-\Bitrix\Main\Diag\Debug::writeToFile($arResult['DEAL'], "deal", "__miros.log");
+
 
 
 

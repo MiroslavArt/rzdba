@@ -53,7 +53,7 @@ else
 				'PATH_TO_DEAL_CALENDARCATEGORY' => $arResult['PATH_TO_DEAL_CALENDARCATEGORY'],
 				'NAME_TEMPLATE' => $arParams['NAME_TEMPLATE'],
 				'NAVIGATION_CONTEXT_ID' => $arResult['NAVIGATION_CONTEXT_ID'],
-				'GRID_ID_SUFFIX' => $categoryID >= 0 ? "C_{$categoryID}" : '',
+				'GRID_ID_SUFFIX' => 'PL', //$categoryID >= 0 ? "C_{$categoryID}" : '',
 				'DISABLE_NAVIGATION_BAR' => 'Y',
 				'CATEGORY_ID' => $categoryID
 			]
