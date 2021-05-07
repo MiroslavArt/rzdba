@@ -1,3 +1,10 @@
 <?php
-\Bitrix\Main\Diag\Debug::writeToFile('fuck', "fuck", "__miros.log");
-\Bitrix\Main\Diag\Debug::writeToFile($arResult, "dealres", "__miros.log");
+$groups = [];
+foreach ($arResult['DEAL'] as $deal) {
+    if($deal['custom']) {
+        $groups[] = $deal['id'];
+    }
+}
+$gridoptions = new \Bitrix\Main\Grid\Options($arResult['GRID_ID']);
+$gridoptions->setCollapsedGroups($groups);
+

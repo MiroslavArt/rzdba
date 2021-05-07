@@ -37,7 +37,7 @@ Bitrix\Main\Page\Asset::getInstance()->addJs('/bitrix/js/crm/dialog.js');
 
 ?><div id="batchDeletionWrapper"></div><?
 ?><div id="rebuildMessageWrapper"><?
-\Bitrix\Main\Diag\Debug::writeToFile($arResult, "dealres", "__miros.log");
+
 if($arResult['NEED_FOR_REBUILD_SEARCH_CONTENT'])
 {
 	?><div id="rebuildDealSearchWrapper"></div><?

@@ -2340,7 +2340,7 @@ if(!isset($arSort['nearest_activity']))
 			break;
 		}*/
 
-        /*if($creategrouping) {
+        if($creategrouping) {
             $groupdeal = [
                 'id' => 'group_'.$lastgroup,
                 'group_id' => $lastgroup,
@@ -2358,7 +2358,7 @@ if(!isset($arSort['nearest_activity']))
                 ]
             ];
             $arResult['DEAL']['group_'.$lastgroup] = $groupdeal;
-        }*/
+        }
 
         $arResult['DEAL'][$arDeal['ID']] = $arDeal;
         $arResult['DEAL'][$arDeal['ID']]['parent_group_id'] = $lastgroup;
@@ -2479,10 +2479,10 @@ if ($arResult['CAN_EXCLUDE'])
 	$arResult['CAN_EXCLUDE'] = !empty($excludeApplicableList);
 }
 // тут уже сделки есть
-\Bitrix\Main\Diag\Debug::writeToFile($arResult['DEAL'], "deal", "__miros.log");
+//\Bitrix\Main\Diag\Debug::writeToFile($arResult['DEAL'], "deal", "__miros.log");
 foreach($arResult['DEAL'] as &$arDeal)
 {
-    //if(empty($arDeal['custom'])) {
+    if(empty($arDeal['custom'])) {
         $entityID = $arDeal['ID'];
         if($enableExportEvent)
         {
@@ -2927,7 +2927,7 @@ foreach($arResult['DEAL'] as &$arDeal)
         }
 
         $arResult['DEAL'][$entityID] = $arDeal;
-    //}
+    }
 }
 unset($arDeal);
 
