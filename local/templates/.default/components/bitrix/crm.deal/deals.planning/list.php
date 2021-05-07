@@ -30,10 +30,12 @@ else
 		'bitrix:ui.sidepanel.wrapper',
 		'',
 		[
-			'POPUP_COMPONENT_NAME' => 'bitrix:crm.deal.list',
+            'POPUP_COMPONENT_NAME' => 'itrack:planning.deal.list',
+		    //'POPUP_COMPONENT_NAME' => 'bitrix:crm.deal.list',
 			'POPUP_COMPONENT_TEMPLATE_NAME' => 'deals.planning',
+            'POPUP_COMPONENT_TEMPLATE_NAME' => '',
 			'POPUP_COMPONENT_PARAMS' => [
-				'DEAL_COUNT' => '20',
+				'DEAL_COUNT' => '2000',
 				'IS_RECURRING' => $arResult['IS_RECURRING'],
 				'PATH_TO_DEAL_RECUR_SHOW' => $arResult['PATH_TO_DEAL_RECUR_SHOW'],
 				'PATH_TO_DEAL_RECUR' => $arResult['PATH_TO_DEAL_RECUR'],
@@ -55,7 +57,9 @@ else
 				'NAVIGATION_CONTEXT_ID' => $arResult['NAVIGATION_CONTEXT_ID'],
 				'GRID_ID_SUFFIX' => 'PL', //$categoryID >= 0 ? "C_{$categoryID}" : '',
 				'DISABLE_NAVIGATION_BAR' => 'Y',
-				'CATEGORY_ID' => $categoryID
+				'CATEGORY_ID' => $categoryID,
+                $arParams['CALENDAR_MODE_LIST'] => true
+                //'INTERNAL_FILTER' => ['!UF_CRM_1620289503' => false]
 			]
 		]
 	);
