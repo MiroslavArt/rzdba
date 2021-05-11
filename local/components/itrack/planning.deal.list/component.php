@@ -2179,19 +2179,48 @@ elseif($pageSize > 0 && (isset($arParams['PAGE_NUMBER']) || isset($_REQUEST['pag
 	if($pageNum < 0)
 	{
 		//Backward mode
-		$offset = -($pageNum + 1);
+        $arFilter['!'.ROUTE_UF] = false;
+        $allroutes = [];
+        if(!array_key_exists($arSelect[ROUTE_UF])) {
+            array_push($arSelect, ROUTE_UF);
+        }
+
+        $dbResult = CCrmDeal::GetListEx(
+            [ROUTE_UF => 'asc'],
+            $arFilter,
+            false,
+            false,
+            $arSelect,
+        );
+
+        while($arDeal = $dbResult->GetNext()) {
+            $allroutes[] = $arDeal[ROUTE_UF];
+        }
+
+        $allroutes = array_unique($allroutes);
+
+        $offset = -($pageNum + 1);
+        $pageNum = (int)(ceil(count($allroutes) / $pageSize)) - $offset;
+
+        if($pageNum <= 0)
+        {
+            $pageNum = 1;
+        }
+
+		/*$offset = -($pageNum + 1);
 		$total = CCrmDeal::GetListEx(array(), $arFilter, array());
 		$pageNum = (int)(ceil($total / $pageSize)) - $offset;
 		if($pageNum <= 0)
 		{
 			$pageNum = 1;
-		}
+		}*/
 	}
 }
 
 if (!($isInExportMode && $isStExport))
 {
-	if ($pageNum > 0)
+
+    if ($pageNum > 0)
 	{
 		if (!isset($_SESSION['CRM_PAGINATION_DATA']))
 		{
@@ -2291,9 +2320,13 @@ if(!isset($arSort['nearest_activity']))
     $arFilter[ROUTE_UF] = $routes;
     \Bitrix\Main\Diag\Debug::writeToFile($arFilter, "filter", "__miros.log");*/
     //$arSort = array_merge([ROUTE_UF, 'asc'],$arSort);
-    $arSort = [];
-    $arSort[ROUTE_UF] = 'asc';
+    //$arSort = [];
+    //$arSort[ROUTE_UF] = 'asc';
+    $arSort = array_merge([ROUTE_UF=>'asc'], $arSort);
     $arFilter['!'.ROUTE_UF] = false;
+    if(!array_key_exists($arSelect[ROUTE_UF])) {
+        array_push($arSelect, ROUTE_UF);
+    }
 
 	$dbResult = CCrmDeal::GetListEx(
 		$arSort,

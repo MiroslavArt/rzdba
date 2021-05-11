@@ -1059,50 +1059,50 @@ $APPLICATION->IncludeComponent(
 		'PRESERVE_HISTORY' => $arResult['PRESERVE_HISTORY'],
 		'MESSAGES' => $messages,
 		'DISABLE_NAVIGATION_BAR' => $arResult['DISABLE_NAVIGATION_BAR'],
-		'NAVIGATION_BAR' => array(
-			'ITEMS' => array_merge(
-				\Bitrix\Crm\Automation\Helper::getNavigationBarItems(\CCrmOwnerType::Deal, $arResult['CATEGORY_ID']),
-				array(
-					array(
-						//'icon' => 'kanban',
-						'id' => 'kanban',
-						'name' => GetMessage('CRM_DEAL_LIST_FILTER_NAV_BUTTON_KANBAN'),
-						'active' => false,
-						'url' => isset($arResult['PATH_TO_DEAL_KANBANCATEGORY'])
-							? $arResult['PATH_TO_DEAL_KANBANCATEGORY']
-							: $arResult['PATH_TO_DEAL_KANBAN']
-					),
-					array(
-						//'icon' => 'table',
-						'id' => 'list',
-						'name' => GetMessage('CRM_DEAL_LIST_FILTER_NAV_BUTTON_LIST'),
-						'active' => true,
-						'url' => isset($arResult['PATH_TO_DEAL_CATEGORY'])
-							? $arResult['PATH_TO_DEAL_CATEGORY']
-							: $arResult['PATH_TO_DEAL_LIST']
-					)
-				),
-				(\Bitrix\Crm\Integration\Calendar::isResourceBookingEnabled()
-					?
-					array(
-						array(
-							'id' => 'calendar',
-							'name' => GetMessage('CRM_DEAL_LIST_FILTER_NAV_BUTTON_CALENDAR'),
-							'active' => false,
-							'url' => isset($arResult['PATH_TO_DEAL_CALENDARCATEGORY'])
-								? $arResult['PATH_TO_DEAL_CALENDARCATEGORY']
-								: $arResult['PATH_TO_DEAL_CALENDAR']
-						)
-					)
-					: array()
-				)
-			),
-			'BINDING' => array(
-				'category' => 'crm.navigation',
-				'name' => 'index',
-				'key' => mb_strtolower($arResult['NAVIGATION_CONTEXT_ID'])
-			)
-		),
+        /*'NAVIGATION_BAR' => array(
+            'ITEMS' => array_merge(
+                \Bitrix\Crm\Automation\Helper::getNavigationBarItems(\CCrmOwnerType::Deal, $arResult['CATEGORY_ID']),
+                array(
+                    array(
+                        //'icon' => 'kanban',
+                        'id' => 'kanban',
+                        'name' => GetMessage('CRM_DEAL_LIST_FILTER_NAV_BUTTON_KANBAN'),
+                        'active' => false,
+                        'url' => isset($arResult['PATH_TO_DEAL_KANBANCATEGORY'])
+                            ? $arResult['PATH_TO_DEAL_KANBANCATEGORY']
+                            : $arResult['PATH_TO_DEAL_KANBAN']
+                    ),
+                    array(
+                        //'icon' => 'table',
+                        'id' => 'list',
+                        'name' => GetMessage('CRM_DEAL_LIST_FILTER_NAV_BUTTON_LIST'),
+                        'active' => true,
+                        'url' => isset($arResult['PATH_TO_DEAL_CATEGORY'])
+                            ? $arResult['PATH_TO_DEAL_CATEGORY']
+                            : $arResult['PATH_TO_DEAL_LIST']
+                    )
+                ),
+                (\Bitrix\Crm\Integration\Calendar::isResourceBookingEnabled()
+                    ?
+                    array(
+                        array(
+                            'id' => 'calendar',
+                            'name' => GetMessage('CRM_DEAL_LIST_FILTER_NAV_BUTTON_CALENDAR'),
+                            'active' => false,
+                            'url' => isset($arResult['PATH_TO_DEAL_CALENDARCATEGORY'])
+                                ? $arResult['PATH_TO_DEAL_CALENDARCATEGORY']
+                                : $arResult['PATH_TO_DEAL_CALENDAR']
+                        )
+                    )
+                    : array()
+                )
+            ),
+            'BINDING' => array(
+                'category' => 'crm.navigation',
+                'name' => 'index',
+                'key' => mb_strtolower($arResult['NAVIGATION_CONTEXT_ID'])
+            )
+        ),*/
 		'IS_EXTERNAL_FILTER' => $arResult['IS_EXTERNAL_FILTER'],
 		'EXTENSION' => array(
 			'ID' => $gridManagerID,
