@@ -1425,7 +1425,9 @@ if($actionData['ACTIVE'])
 				{
 					$arActionFilter = $arFilter;
 					$arActionFilter['CHECK_PERMISSIONS'] = 'N'; // Ignore 'WRITE' permission - we will check it before update.
-					$dbRes = CCrmDeal::GetListEx(array(), $arActionFilter, false, false, array('ID'));
+                    $arActionFilter['!'.ROUTE_UF] = false;
+
+                    $dbRes = CCrmDeal::GetListEx(array(), $arActionFilter, false, false, array('ID'));
 					while($arDeal = $dbRes->Fetch())
 					{
 						$arIDs[] = $arDeal['ID'];
@@ -1446,7 +1448,7 @@ if($actionData['ACTIVE'])
 					$DB->StartTransaction();
 
 					$arUpdateData = array(
-						'ASSIGNED_BY_ID' => $actionData['ASSIGNED_BY_ID']
+                        PLAN_UF => $actionData['ASSIGNED_BY_ID']
 					);
 
 					if($CCrmDeal->Update($ID, $arUpdateData, true, true, array('DISABLE_USER_FIELD_CHECK' => true)))

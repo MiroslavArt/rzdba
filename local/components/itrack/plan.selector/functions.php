@@ -2,6 +2,8 @@
 if(!Defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
 __IncludeLang(dirname(__FILE__).'/lang/'.LANGUAGE_ID.'/'.basename(__FILE__));
 
+use Itrack\Custom\Helpers\Utils;
+
 if(!function_exists('InEmployeeDrawStructure'))
 {
 	function InEmployeeDrawStructure($arStructure, $arSections, $key, $name)
@@ -239,7 +241,7 @@ class CIntranetUserSelectorHelper
 				include_once($_SERVER['DOCUMENT_ROOT'] . "/bitrix/modules/main/classes/" . $GLOBALS['DBType'] . "/favorites.php");
 			}
 
-			$arLastSelected = CUserOptions::GetOption("intranet", "user_search", array());
+			$arLastSelected = CUserOptions::GetOption("intranet", "plan_search", array());
 			if (is_array($arLastSelected) && $arLastSelected['last_selected'] <> '')
 			{
 				$arLastSelected = array_unique(explode(',', $arLastSelected['last_selected']));
@@ -247,20 +249,6 @@ class CIntranetUserSelectorHelper
 			else
 			{
 				$arLastSelected = false;
-			}
-
-			if (is_array($arLastSelected))
-			{
-				$currentUser = array_search($USER->getID(), $arLastSelected);
-				if ($currentUser !== false)
-				{
-					unset($arLastSelected[$currentUser]);
-				}
-				array_unshift($arLastSelected, $USER->getID());
-			}
-			elseif($USER->getID())
-			{
-				$arLastSelected = array($USER->getID());
 			}
 
 			$arFilter = array('ACTIVE' => 'Y');
@@ -281,29 +269,16 @@ class CIntranetUserSelectorHelper
 			}
 
 			$arFilter['ID'] = is_array($arLastSelected) ? implode('|', array_slice($arLastSelected, 0, 10)) : '-1';
-			$dbRes = CUser::GetList($by = 'last_name', $order = 'asc', $arFilter, array('SELECT' => array('UF_DEPARTMENT')));
-			$arLastUsers[$cacheKey] = array();
-			while ($arRes = $dbRes->GetNext())
-			{
-				$arLastUsers[$cacheKey][$arRes['ID']] = array(
-					'ID' => $arRes['ID'],
-					'NAME' => CUser::FormatName(empty($nameTemplate) ? CSite::GetNameFormat() : $nameTemplate, $arRes, true, false),
-					'~NAME' => CUser::FormatName(empty($nameTemplate) ? CSite::GetNameFormat() : $nameTemplate, array(
-							"NAME" => $arRes["~NAME"],
-							"LAST_NAME" => $arRes["~LAST_NAME"],
-							"LOGIN" => $arRes["~LOGIN"],
-							"SECOND_NAME" => $arRes["~SECOND_NAME"],
-						), true, false),
-					'LOGIN' => $arRes['LOGIN'],
-					'EMAIL' => $arRes['EMAIL'],
-					'WORK_POSITION' => $arRes['WORK_POSITION'] ? $arRes['WORK_POSITION'] : $arRes['PERSONAL_PROFESSION'],
-					'~WORK_POSITION' => $arRes['~WORK_POSITION'] ? $arRes['~WORK_POSITION'] : $arRes['~PERSONAL_PROFESSION'],
-					'PHOTO' => (string)CIntranetUtils::createAvatar($arRes, array(), $siteId),
-					'HEAD' => false,
-					'SUBORDINATE' => is_array($arSubDeps) && is_array($arRes['UF_DEPARTMENT']) && array_intersect($arRes['UF_DEPARTMENT'], $arSubDeps) ? 'Y' : 'N',
-					'SUPERORDINATE' => in_array($arRes["ID"], $arManagers) ? 'Y' : 'N',
-				);
-			}
+			$planib = Utils::getIDIblockByCode(IBPL_PLAN, IBPL_TYPE);
+            $plans = Utils::getIBlockElementsByConditions($planib, $arFilter);
+
+            foreach($plans as $plan) {
+                $arLastUsers[$cacheKey][$plan['ID']] = array(
+                    'ID' => $plan['ID'],
+                    'NAME' => $plan['NAME'],
+                    '~NAME' => $plan['NAME']
+                );
+            }
 
 			$listOrder = array_flip(array_values($arLastSelected));
 			uksort($arLastUsers[$cacheKey], function ($a, $b) use ($listOrder)

@@ -398,7 +398,7 @@ IntranetUsers.prototype.select = function(e)
 		IntranetUsers.lastUsers.splice(posInLast, 1);
 
 	IntranetUsers.lastUsers.unshift(obInput.value);
-	BX.userOptions.save('intranet', 'user_search', 'last_selected', IntranetUsers.lastUsers.slice(0, 10));
+	BX.userOptions.save('intranet', 'plan_search', 'last_selected', IntranetUsers.lastUsers.slice(0, 10));
 
 	if (this.onSelect)
 	{
