@@ -21,7 +21,7 @@ $MESS["CRM_DEAL_CALENDAR_TITLE"] = "Добавить новую запись в 
 $MESS["CRM_DEAL_CALENDAR"] = "Добавить звонок/встречу";
 $MESS["CRM_STAGE_INIT"] = "- Стадия сделки -";
 $MESS["CRM_DEAL_SET_STAGE"] = "Установить стадию";
-$MESS["CRM_DEAL_ASSIGN_TO"] = "Назначить ответственного";
+$MESS["CRM_DEAL_ASSIGN_TO"] = "Назначить план";
 $MESS["CRM_DEAL_ADD_CALL_TITLE"] = "Добавить новый звонок";
 $MESS["CRM_DEAL_ADD_CALL"] = "Добавить звонок";
 $MESS["CRM_DEAL_ADD_MEETING_TITLE"] = "Добавить новую встречу";
@@ -32,7 +32,7 @@ $MESS["CRM_DEAL_ADD_INVOICE_TITLE"] = "Выставить счёт";
 $MESS["CRM_DEAL_ADD_INVOICE"] = "Выставить счёт";
 $MESS["CRM_DEAL_LIST_ADD_SHORT"] = "Сделка";
 $MESS["CRM_DEAL_LIST_ADD"] = "Добавить сделку";
-$MESS["CRM_DEAL_MARK_AS_OPENED"] = "Сделать доступной для всех";
+$MESS["CRM_DEAL_MARK_AS_OPENED"] = "Подтвердить";
 $MESS["CRM_DEAL_MARK_AS_OPENED_YES"] = "Да";
 $MESS["CRM_DEAL_MARK_AS_OPENED_NO"] = "Нет";
 $MESS["CRM_DEAL_REBUILD_ACCESS_ATTRS"] = "Для правильной работы обновлённых прав доступа необходимо выполнить обновление атрибутов доступа на <a id=\"#ID#\" target=\"_blank\" href=\"#URL#\">странице управления правами</a>.";

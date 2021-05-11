@@ -577,102 +577,6 @@ if(!$isInternal
 
 	if($allowWrite && $arParams['IS_RECURRING'] !== "Y")
 	{
-		//region Add Task
-		if (IsModuleInstalled('tasks'))
-		{
-			$actionList[] = array(
-				'NAME' => GetMessage('CRM_DEAL_TASK'),
-				'VALUE' => 'tasks',
-				'ONCHANGE' => array(
-					array(
-						'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-						'DATA' => array($applyButton)
-					),
-					array(
-						'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-						'DATA' => array(array('JS' => "BX.CrmUIGridExtension.processActionChange('{$gridManagerID}', 'tasks')"))
-					)
-				)
-			);
-		}
-		//endregion
-
-		if ($arParams['IS_RECURRING'] !== "Y")
-		{
-			//region Set Stage
-			if($arResult['EFFECTIVE_CATEGORY_ID'] >= 0)
-			{
-				//TODO: if category not selected show 2 selectors: category and stage
-				$stageList = array(array('NAME' => GetMessage('CRM_STAGE_INIT'), 'VALUE' => ''));
-				if(isset($arResult['CATEGORY_STAGE_LIST']))
-				{
-					foreach($arResult['CATEGORY_STAGE_LIST'] as $stageID => $stageName)
-					{
-						$stageList[] = array('NAME' => $stageName, 'VALUE' => $stageID);
-					}
-				}
-				elseif(isset($arResult['CATEGORY_STAGE_GROUPS']))
-				{
-					foreach($arResult['CATEGORY_STAGE_GROUPS'] as $group)
-					{
-						$groupName = isset($group['name']) ? $group['name'] : '';
-						if($groupName !== '')
-						{
-							$stageList[] = array('NAME' => $groupName, 'VALUE' => '', 'IS_GROUP' => true);
-						}
-
-						$groupItems = isset($group['items']) && is_array($group['items']) ? $group['items'] : array();
-						foreach($groupItems as $itemKey => $itemName)
-						{
-							$stageList[] = array('NAME' => $itemName, 'VALUE' => $itemKey);
-						}
-					}
-				}
-
-				$actionList[] = array(
-					'NAME' => GetMessage('CRM_DEAL_SET_STAGE'),
-					'VALUE' => 'set_stage',
-					'ONCHANGE' => array(
-						array(
-							'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-							'DATA' => array(
-								array(
-									'TYPE' => Bitrix\Main\Grid\Panel\Types::DROPDOWN,
-									'ID' => 'action_stage_id',
-									'NAME' => 'ACTION_STAGE_ID',
-									'ITEMS' => $stageList
-								),
-								$applyButton
-							)
-						),
-						array(
-							'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-							'DATA' => array(array('JS' => "BX.CrmUIGridExtension.processActionChange('{$gridManagerID}', 'set_stage')"))
-						)
-					)
-				);
-			}
-			else
-			{
-				$actionList[] = array(
-					'NAME' => GetMessage('CRM_DEAL_SET_STAGE'),
-					'VALUE' => 'set_stage',
-					'PSEUDO' => true,
-					'ONCHANGE' => array(
-						array(
-							'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-							'DATA' => array($applyButton)
-						),
-						array(
-							'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-							'DATA' => array(array('JS' => "BX.NotificationPopup.show(\"select_category\", { timeout: 5000, align: \"justify\", messages: [\"".GetMessageJS('CRM_DEAL_LIST_SELECT_CATEGORY_FOR_SET_STAGE_TITLE')."\", \"".GetMessageJS('CRM_DEAL_LIST_SELECT_CATEGORY_FOR_SET_STAGE_CONTENT')."\"] })"))
-						)
-					)
-				);
-			}
-			//endregion
-		}
-
 		//region Assign To
 		//region Render User Search control
 		if(!Bitrix\Main\Grid\Context::isInternalRequest())
@@ -680,7 +584,7 @@ if(!$isInternal
 			//action_assigned_by_search + _control
 			//Prefix control will be added by main.ui.grid
 			$APPLICATION->IncludeComponent(
-				'bitrix:intranet.user.selector.new',
+				'itrack:plan.selector',
 				'',
 				array(
 					'MULTIPLE' => 'N',
@@ -689,7 +593,10 @@ if(!$isInternal
 					'SHOW_EXTRANET_USERS' => 'NONE',
 					'POPUP' => 'Y',
 					'SITE_ID' => SITE_ID,
-					'NAME_TEMPLATE' => $arResult['NAME_TEMPLATE']
+					'NAME_TEMPLATE' => $arResult['NAME_TEMPLATE'],
+                    'DISPLAY_TABS' => false,
+                    'DISPLAY_TAB_GROUP' => false,
+                    'DISPLAY_TAB_STRUCTURE' => false
 				),
 				null,
 				array('HIDE_ICONS' => 'Y')
@@ -730,126 +637,20 @@ if(!$isInternal
 		);
 		//endregion
 		//region Create call list
-		if(IsModuleInstalled('voximplant'))
-		{
-			$actionList[] = array(
-				'NAME' => GetMessage('CRM_DEAL_CREATE_CALL_LIST'),
-				'VALUE' => 'create_call_list',
-				'ONCHANGE' => array(
-					array(
-						'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-						'DATA' => array(
-							$applyButton
-						)
-					),
-					array(
-						'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-						'DATA' => array(array('JS' => "BX.CrmUIGridExtension.processActionChange('{$gridManagerID}', 'create_call_list')"))
-					)
-				)
-			);
-		}
+
 		//endregion
 
 		//region Refresh Accounting Data
-		$actionList[] = array(
-			'NAME' => GetMessage('CRM_DEAL_REFRESH_ACCOUNT'),
-			'VALUE' => 'refresh_account',
-			'ONCHANGE' => array(
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-					'DATA' => array($applyButton)
-				)
-			)
 
-		);
-		//endregion
-
-		if($allowDelete)
-		{
-			$actionList[] = array(
-				'NAME' => GetMessage('CRM_DEAL_ACTION_MERGE'),
-				'VALUE' => 'merge',
-				'ONCHANGE' => array(
-					array(
-						'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-						'DATA' => array(
-							array_merge(
-								$applyButton,
-								['SETTINGS' => [
-									'minSelectedRows' => 2,
-									'buttonId' => 'apply_button'
-								]]
-							)
-						)
-					),
-					array(
-						'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-						'DATA' => array(array('JS' => "BX.CrmUIGridExtension.applyAction('{$gridManagerID}', 'merge')"))
-					)
-				)
-			);
-		}
 	}
 
-	if($allowDelete)
-	{
-		//region Remove button
-		//$controlPanel['GROUPS'][0]['ITEMS'][] = $snippet->getRemoveButton();
-		$button = $snippet->getRemoveButton();
-		$snippet->setButtonActions(
-			$button,
-			array(
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-					'CONFIRM' => false,
-					'DATA' => array(array('JS' => "BX.CrmUIGridExtension.applyAction('{$gridManagerID}', 'delete')"))
-				)
-			)
-		);
-		$controlPanel['GROUPS'][0]['ITEMS'][] = $button;
-		//endregion
 
-		//$actionList[] = $snippet->getRemoveAction();
-		$actionList[] = array(
-			'NAME' => GetMessage('CRM_DEAL_ACTION_DELETE'),
-			'VALUE' => 'delete',
-			'ONCHANGE' => array(
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::RESET_CONTROLS,
-				),
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-					'DATA' => array(array('JS' => "BX.CrmUIGridExtension.applyAction('{$gridManagerID}', 'delete')"))
-				)
-			)
-		);
-	}
 
-	if($allowExclude)
-	{
-		$actionList[] = array(
-			'NAME' => GetMessage('CRM_DEAL_EXCLUDE'),
-			'VALUE' => 'exclude',
-			'ONCHANGE' => array(
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
-					'DATA' => array($applyButton)
-				),
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-					'DATA' => array(array('JS' => "BX.CrmUIGridExtension.processActionChange('{$gridManagerID}', 'exclude')"))
-				)
-			)
-		);
-	}
+
 
 	if($allowWrite)
 	{
-		//region Edit Button
-		$controlPanel['GROUPS'][0]['ITEMS'][] = $snippet->getEditButton();
-		$actionList[] = $snippet->getEditAction();
-		//endregion
+
 
 		//region Mark as Opened
 		$actionList[] = array(
@@ -912,46 +713,12 @@ if(!$isInternal
 		}
 	}
 
-	if($callListUpdateMode)
-	{
-		$controlPanel['GROUPS'][0]['ITEMS'][] = array(
-			"TYPE" => \Bitrix\Main\Grid\Panel\Types::BUTTON,
-			"TEXT" => GetMessage("CRM_DEAL_UPDATE_CALL_LIST"),
-			"ID" => "update_call_list",
-			"NAME" => "update_call_list",
-			'ONCHANGE' => array(
-				array(
-					'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-					'DATA' => array(array('JS' => "BX.CrmUIGridExtension.updateCallList('{$gridManagerID}', {$arResult['CALL_LIST_ID']}, '{$arResult['CALL_LIST_CONTEXT']}')"))
-				)
-			)
-		);
-	}
-	else
-	{
-		//region Create & start call list
-		if(IsModuleInstalled('voximplant'))
-		{
-			$controlPanel['GROUPS'][0]['ITEMS'][] = array(
-				"TYPE" => \Bitrix\Main\Grid\Panel\Types::BUTTON,
-				"TEXT" => GetMessage('CRM_DEAL_START_CALL_LIST'),
-				"VALUE" => "start_call_list",
-				"ONCHANGE" => array(
-					array(
-						"ACTION" => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
-						"DATA" => array(array('JS' => "BX.CrmUIGridExtension.createCallList('{$gridManagerID}', true)"))
-					)
-				)
-			);
-		}
-		//endregion
-		$controlPanel['GROUPS'][0]['ITEMS'][] = array(
-			"TYPE" => \Bitrix\Main\Grid\Panel\Types::DROPDOWN,
-			"ID" => "action_button_{$prefix}",
-			"NAME" => "action_button_{$prefix}",
-			"ITEMS" => $actionList
-		);
-	}
+    $controlPanel['GROUPS'][0]['ITEMS'][] = array(
+        "TYPE" => \Bitrix\Main\Grid\Panel\Types::DROPDOWN,
+        "ID" => "action_button_{$prefix}",
+        "NAME" => "action_button_{$prefix}",
+        "ITEMS" => $actionList
+    );
 
 	$controlPanel['GROUPS'][0]['ITEMS'][] = $snippet->getForAllCheckbox();
 }
@@ -1014,7 +781,7 @@ if(isset($arResult['MESSAGES']) && is_array($arResult['MESSAGES']))
 }
 
 //$arParams['IS_RECURRING']
-$APPLICATION->IncludeComponent(
+/*$APPLICATION->IncludeComponent(
 	'bitrix:crm.newentity.counter.panel',
 	'',
 	array(
@@ -1022,7 +789,7 @@ $APPLICATION->IncludeComponent(
 		'GRID_ID' => $arResult['GRID_ID']
 	),
 	$component
-);
+);*/
 //\Bitrix\Main\Diag\Debug::writeToFile($arResult['GRID_DATA'], "arresultgd", "__miros.log");
 $APPLICATION->IncludeComponent(
 	'bitrix:crm.interface.grid',
@@ -1052,7 +819,7 @@ $APPLICATION->IncludeComponent(
 			? $arResult['LIVE_SEARCH_LIMIT_INFO'] : null,
 		'ENABLE_LIVE_SEARCH' => true,
 		'ENABLE_COLLAPSIBLE_ROWS' => true,
-		//'ACTION_PANEL' => $controlPanel,
+		'ACTION_PANEL' => $controlPanel,
 		'PAGINATION' => isset($arResult['PAGINATION']) && is_array($arResult['PAGINATION'])
 			? $arResult['PAGINATION'] : array(),
 		'ENABLE_ROW_COUNT_LOADER' => true,

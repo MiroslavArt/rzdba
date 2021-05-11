@@ -1,0 +1,9 @@
+<?
+$MESS["INTRANET_EMP_CURRENT_COUNT"] = "चयनित";
+$MESS["INTRANET_EMP_HEAD"] = "विभाग प्रमुख";
+$MESS["INTRANET_LAST_SELECTED"] = "हालिया";
+$MESS["INTRANET_TAB_USER_GROUPS"] = "ग्रुप";
+$MESS["INTRANET_TAB_USER_STRUCTURE"] = "कंपनी";
+$MESS["INTRANET_USER_SEARCH"] = "खोजें";
+$MESS["INTRANET_USER_STRUCTURE"] = "संरचना से चुनें";
+?>
