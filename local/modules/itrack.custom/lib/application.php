@@ -36,6 +36,8 @@ class Application
         define('ROUTE_UF', 'UF_CRM_1620289503');
         // код ПП план в сделке
         define('PLAN_UF', 'UF_CRM_1618904516');
+        // код ПП Оговариваемый объем ДФЭ в сделке
+        define('DFE_UF', 'UF_CRM_5FBD24C4EE591');
     }
 
 

@@ -2329,6 +2329,9 @@ if(!isset($arSort['nearest_activity']))
     if(!array_key_exists($arSelect[ROUTE_UF])) {
         array_push($arSelect, ROUTE_UF);
     }
+    if(!array_key_exists($arSelect[DFE_UF])) {
+        array_push($arSelect, DFE_UF);
+    }
 
 	$dbResult = CCrmDeal::GetListEx(
 		$arSort,
@@ -2344,7 +2347,7 @@ if(!isset($arSort['nearest_activity']))
     $lastgroup = '';
     $group = '';
 
-
+    $arResult['GROUPDEAL'] = [];
 	$countr = 0;
 	$creategrouping = false;
 	while($arDeal = $dbResult->GetNext())
@@ -2394,7 +2397,8 @@ if(!isset($arSort['nearest_activity']))
             ];
             $arResult['DEAL']['group_'.$lastgroup] = $groupdeal;
         }
-
+        $arResult['GROUPDEAL'][$lastgroup]['count']++;
+        $arResult['GROUPDEAL'][$lastgroup]['dfe'] += $arDeal[DFE_UF];
         $arResult['DEAL'][$arDeal['ID']] = $arDeal;
         $arResult['DEAL'][$arDeal['ID']]['parent_group_id'] = $lastgroup;
         $arResult['DEAL'][$arDeal['ID']]['attrs'] = [
