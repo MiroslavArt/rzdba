@@ -14,7 +14,7 @@ $aMenuLinks = Array(
 		Array(),
         "CBXFeatures::IsFeatureEnabled('crm') && CModule::IncludeModule('crm') && CCrmPerms::IsAccessEnabled()"
 	),
-	Array(
+	/*Array(
 		"Подразделы планов", 
 		"/planning/plansubsection/index.php", 
 		Array(), 
@@ -27,6 +27,6 @@ $aMenuLinks = Array(
 		Array(), 
 		Array(),
         "CBXFeatures::IsFeatureEnabled('crm') && CModule::IncludeModule('crm') && CCrmPerms::IsAccessEnabled()"
-	)
+	)*/
 );
 ?>
