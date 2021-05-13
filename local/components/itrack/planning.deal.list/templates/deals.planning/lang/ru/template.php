@@ -32,7 +32,7 @@ $MESS["CRM_DEAL_ADD_INVOICE_TITLE"] = "Выставить счёт";
 $MESS["CRM_DEAL_ADD_INVOICE"] = "Выставить счёт";
 $MESS["CRM_DEAL_LIST_ADD_SHORT"] = "Сделка";
 $MESS["CRM_DEAL_LIST_ADD"] = "Добавить сделку";
-$MESS["CRM_DEAL_MARK_AS_OPENED"] = "Подтвердить";
+$MESS["CRM_DEAL_MARK_AS_OPENED"] = "Задать статус";
 $MESS["CRM_DEAL_MARK_AS_OPENED_YES"] = "Да";
 $MESS["CRM_DEAL_MARK_AS_OPENED_NO"] = "Нет";
 $MESS["CRM_DEAL_REBUILD_ACCESS_ATTRS"] = "Для правильной работы обновлённых прав доступа необходимо выполнить обновление атрибутов доступа на <a id=\"#ID#\" target=\"_blank\" href=\"#URL#\">странице управления правами</a>.";

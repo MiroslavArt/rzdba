@@ -38,6 +38,8 @@ class Application
         define('PLAN_UF', 'UF_CRM_1618904516');
         // код ПП Оговариваемый объем ДФЭ в сделке
         define('DFE_UF', 'UF_CRM_5FBD24C4EE591');
+        // код ПП статус сделки
+        define('STAT_UF', 'UF_CRM_1620752404');
     }
 
 

@@ -637,20 +637,21 @@ if(!$isInternal
 		);
 		//endregion
 		//region Create call list
-
 		//endregion
-
 		//region Refresh Accounting Data
-
 	}
-
-
-
-
 
 	if($allowWrite)
 	{
+        $statusList = array();
 
+	    // statuslist
+        foreach($arResult['HEADERS'][STAT_UF]['editable']['items'] as $key => $item) {
+            if($item) {
+               $itemarr = array('NAME' => $item, 'VALUE' => $key);
+               $statusList[] = $itemarr;
+            }
+        }
 
 		//region Mark as Opened
 		$actionList[] = array(
@@ -664,7 +665,7 @@ if(!$isInternal
 							'TYPE' => Bitrix\Main\Grid\Panel\Types::DROPDOWN,
 							'ID' => 'action_opened',
 							'NAME' => 'ACTION_OPENED',
-							'ITEMS' => $yesnoList
+							'ITEMS' => $statusList
 						),
 						$applyButton
 					)

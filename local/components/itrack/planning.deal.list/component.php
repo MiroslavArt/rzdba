@@ -922,14 +922,16 @@ if(check_bitrix_sessid())
 
 		if(isset($_POST['ACTION_OPENED']) || isset($controls['ACTION_OPENED']))
 		{
-			if(isset($_POST['ACTION_OPENED']))
+		    if(isset($_POST['ACTION_OPENED']))
 			{
 				$actionData['OPENED'] = mb_strtoupper($_POST['ACTION_OPENED']) === 'Y' ? 'Y' : 'N';
 				unset($_POST['ACTION_OPENED'], $_REQUEST['ACTION_OPENED']);
 			}
 			else
 			{
-				$actionData['OPENED'] = mb_strtoupper($controls['ACTION_OPENED']) === 'Y' ? 'Y' : 'N';
+				// берем сюда статус
+			    //$actionData['OPENED'] = mb_strtoupper($controls['ACTION_OPENED']) === 'Y' ? 'Y' : 'N';
+                $actionData['OPENED'] = $controls['ACTION_OPENED'];
 			}
 		}
 
@@ -1474,7 +1476,62 @@ if($actionData['ACTIVE'])
 		}
 		elseif($actionData['NAME'] == 'mark_as_opened')
 		{
-			if(isset($actionData['OPENED']) && $actionData['OPENED'] != '')
+            // смена статуса сделки
+		    if(isset($actionData['OPENED']))
+            {
+                $arIDs = array();
+                if ($actionData['ALL_ROWS'])
+                {
+                    $arActionFilter = $arFilter;
+                    $arActionFilter['CHECK_PERMISSIONS'] = 'N'; // Ignore 'WRITE' permission - we will check it before update.
+                    $arActionFilter['!'.ROUTE_UF] = false;
+
+                    $dbRes = CCrmDeal::GetListEx(array(), $arActionFilter, false, false, array('ID'));
+                    while($arDeal = $dbRes->Fetch())
+                    {
+                        $arIDs[] = $arDeal['ID'];
+                    }
+                }
+                elseif (isset($actionData['ID']) && is_array($actionData['ID']))
+                {
+                    $arIDs = $actionData['ID'];
+                }
+
+                foreach($arIDs as $ID)
+                {
+                    if (!CCrmDeal::CheckUpdatePermission($ID, $userPermissions))
+                    {
+                        continue;
+                    }
+
+                    $DB->StartTransaction();
+
+                    $arUpdateData = array(
+                        STAT_UF => $actionData['OPENED']
+                    );
+
+                    if($CCrmDeal->Update($ID, $arUpdateData, true, true, array('DISABLE_USER_FIELD_CHECK' => true)))
+                    {
+                        $DB->Commit();
+
+                        $arErrors = array();
+                        CCrmBizProcHelper::AutoStartWorkflows(
+                            CCrmOwnerType::Deal,
+                            $ID,
+                            CCrmBizProcEventType::Edit,
+                            $arErrors
+                        );
+                        $starter = new Bitrix\Crm\Automation\Starter(CCrmOwnerType::Deal, $ID);
+                        $starter->setUserIdFromCurrent()->runOnUpdate($arUpdateData, []);
+                    }
+                    else
+                    {
+                        $DB->Rollback();
+                    }
+                }
+            }
+
+		    /*if(isset($actionData['OPENED']) && $actionData['OPENED'] != '')
 			{
 				$isOpened = mb_strtoupper($actionData['OPENED']) === 'Y' ? 'Y' : 'N';
 				$arIDs = array();
@@ -1554,7 +1611,7 @@ if($actionData['ACTIVE'])
 						$DB->Rollback();
 					}
 				}
-			}
+			}*/
 		}
 		elseif($actionData['NAME'] == 'refresh_account')
 		{
