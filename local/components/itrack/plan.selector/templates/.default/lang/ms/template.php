@@ -1,0 +1,9 @@
+<?
+$MESS["INTRANET_EMP_CURRENT_COUNT"] = "Terpilih";
+$MESS["INTRANET_EMP_HEAD"] = "ketua jabatan";
+$MESS["INTRANET_LAST_SELECTED"] = "Baru-Baru ini";
+$MESS["INTRANET_TAB_USER_GROUPS"] = "Kumpulan";
+$MESS["INTRANET_TAB_USER_STRUCTURE"] = "Syarikat";
+$MESS["INTRANET_USER_SEARCH"] = "Carian";
+$MESS["INTRANET_USER_STRUCTURE"] = "Pilih Dari Struktur";
+?>

@@ -1,0 +1,4 @@
+<?
+$MESS["CRM_DEAL_LIST_SWITCHER_LIST"] = "स्टैंडर्ड";
+$MESS["CRM_DEAL_LIST_SWITCHER_RECUR"] = "आवर्ती";
+?>

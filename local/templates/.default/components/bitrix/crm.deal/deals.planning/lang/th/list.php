@@ -1,0 +1,4 @@
+<?
+$MESS["CRM_DEAL_LIST_SWITCHER_LIST"] = "มาตรฐาน";
+$MESS["CRM_DEAL_LIST_SWITCHER_RECUR"] = "ที่เกิดซ้ำ";
+?>

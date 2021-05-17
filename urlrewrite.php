@@ -1392,4 +1392,12 @@ $arUrlRewrite=array (
     'PATH' => '/kb/index.php',
     'SORT' => 100,
   ),
+    188 =>
+        array (
+            'CONDITION' => '#^/planning/planlist/#',
+            'RULE' => '',
+            'ID' => 'itrack:planning.list',
+            'PATH' => '/planning/planlist/index.php',
+            'SORT' => 100,
+        ),
 );

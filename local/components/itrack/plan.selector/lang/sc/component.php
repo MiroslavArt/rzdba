@@ -1,0 +1,4 @@
+<?
+$MESS["INTRANET_EMP_EXTRANET"] = "外部网络";
+$MESS["INTRANET_MODULE_NOT_FOUND"] = "未安装内部网络模块。";
+?>

@@ -1,0 +1,4 @@
+<?
+$MESS["CRM_DEAL_LIST_SWITCHER_LIST"] = "Standart";
+$MESS["CRM_DEAL_LIST_SWITCHER_RECUR"] = "Yinelenen";
+?>
