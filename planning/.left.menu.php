@@ -9,7 +9,7 @@ $aMenuLinks = Array(
 	),
 	Array(
 		"Список планов", 
-		"/planning/planlist/index.php", 
+		"/planning/planlist/65/view/0/?list_section_id=",
 		Array(), 
 		Array(),
         "CBXFeatures::IsFeatureEnabled('crm') && CModule::IncludeModule('crm') && CCrmPerms::IsAccessEnabled()"

@@ -31,9 +31,7 @@ else
 		'',
 		[
             'POPUP_COMPONENT_NAME' => 'itrack:planning.deal.list',
-		    //'POPUP_COMPONENT_NAME' => 'bitrix:crm.deal.list',
-			'POPUP_COMPONENT_TEMPLATE_NAME' => 'deals.planning',
-            //'POPUP_COMPONENT_TEMPLATE_NAME' => '',
+            'POPUP_COMPONENT_TEMPLATE_NAME' => '',
 			'POPUP_COMPONENT_PARAMS' => [
 				'DEAL_COUNT' => '2000',
 				'IS_RECURRING' => $arResult['IS_RECURRING'],
