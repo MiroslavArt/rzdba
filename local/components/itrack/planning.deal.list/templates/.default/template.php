@@ -66,7 +66,8 @@ if($arResult['NEED_FOR_REBUILD_DEAL_ATTRS'])
 }
 ?></div><?
 $isRecurring = isset($arParams['IS_RECURRING']) && $arParams['IS_RECURRING'] === 'Y';
-$isInternal = $arResult['INTERNAL'];
+//$isInternal = $arResult['INTERNAL'];
+$isInternal = false;
 $callListUpdateMode = $arResult['CALL_LIST_UPDATE_MODE'];
 $allowWrite = $arResult['PERMS']['WRITE'];
 $allowDelete = $arResult['PERMS']['DELETE'];
@@ -791,7 +792,7 @@ if(isset($arResult['MESSAGES']) && is_array($arResult['MESSAGES']))
 	),
 	$component
 );*/
-//\Bitrix\Main\Diag\Debug::writeToFile($arResult['GRID_DATA'], "arresultgd", "__miros.log");
+
 $APPLICATION->IncludeComponent(
 	'bitrix:crm.interface.grid',
 	'titleflex',
@@ -880,7 +881,7 @@ $APPLICATION->IncludeComponent(
 				'activityEditorId' => $activityEditorID,
 				'activityServiceUrl' => '/bitrix/components/bitrix/crm.activity.editor/ajax.php?siteID='.SITE_ID.'&'.bitrix_sessid_get(),
 				'taskCreateUrl'=> isset($arResult['TASK_CREATE_URL']) ? $arResult['TASK_CREATE_URL'] : '',
-				'serviceUrl' => '/bitrix/components/bitrix/crm.deal.list/list.ajax.php?siteID='.SITE_ID.'&'.bitrix_sessid_get(),
+				'serviceUrl' => '/local/components/itrack/planning.deal.list/list.ajax.php?siteID='.SITE_ID.'&'.bitrix_sessid_get(),
 				'loaderData' => isset($arParams['AJAX_LOADER']) ? $arParams['AJAX_LOADER'] : null
 			),
 			'MESSAGES' => array(

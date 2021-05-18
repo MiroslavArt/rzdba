@@ -12,6 +12,7 @@ if($siteID !== '')
 }
 
 require_once($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/main/include/prolog_before.php');
+
 if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 {
 	die();
@@ -25,23 +26,6 @@ if (!CModule::IncludeModule('crm') || !CCrmSecurityHelper::IsAuthorized() || !ch
 global $APPLICATION;
 Header('Content-Type: text/html; charset='.LANG_CHARSET);
 $APPLICATION->ShowAjaxHead();
-
-if(\Bitrix\Main\ModuleManager::isModuleInstalled('rest'))
-{
-	$APPLICATION->IncludeComponent(
-		'bitrix:app.placement',
-		'menu',
-		array(
-			'PLACEMENT' => "CRM_DEAL_LIST_MENU",
-			"PLACEMENT_OPTIONS" => array(),
-			'INTERFACE_EVENT' => 'onCrmDealMenuInterfaceInit',
-			'MENU_EVENT_MODULE' => 'crm',
-			'MENU_EVENT' => 'onCrmDealListItemBuildMenu',
-		),
-		null,
-		array('HIDE_ICONS' => 'Y')
-	);
-}
 
 $componentData = isset($_REQUEST['PARAMS']) && is_array($_REQUEST['PARAMS']) ? $_REQUEST['PARAMS'] : array();
 $componentParams = isset($componentData['params']) && is_array($componentData['params']) ? $componentData['params'] : array();
@@ -80,11 +64,11 @@ elseif($quoteID > 0)
 
 if(!$isPermitted)
 {
-	die();
+	//die();
 }
 //For custom reload with params
 $ajaxLoaderParams = array(
-	'url' => '/bitrix/components/bitrix/crm.deal.list/lazyload.ajax.php?&site='.SITE_ID.'&'.bitrix_sessid_get(),
+	'url' => '/local/components/itrack/planning.deal.list/lazyload.ajax.php?&site='.SITE_ID.'&'.bitrix_sessid_get(),
 	'method' => 'POST',
 	'dataType' => 'ajax',
 	'data' => array('PARAMS' => $componentData)
@@ -98,9 +82,8 @@ $componentParams['AJAX_LOADER'] = $ajaxLoaderParams;
 
 //Enable sanitaizing
 $componentParams['IS_EXTERNAL_CONTEXT'] = 'Y';
-
-$APPLICATION->IncludeComponent('bitrix:crm.deal.list',
-	isset($componentData['template']) ? $componentData['template'] : '',
+$APPLICATION->IncludeComponent('itrack:planning.deal.list',
+    'inside.plan',
 	$componentParams,
 	false,
 	array('HIDE_ICONS' => 'Y', 'ACTIVE_COMPONENT' => 'Y')

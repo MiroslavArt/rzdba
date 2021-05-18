@@ -40,6 +40,8 @@ class Application
         define('DFE_UF', 'UF_CRM_5FBD24C4EE591');
         // код ПП статус сделки
         define('STAT_UF', 'UF_CRM_1620752404');
+        // код свойства Подтвержден статуса сделки
+        define('APP_STAT', '351');
     }
 
 
