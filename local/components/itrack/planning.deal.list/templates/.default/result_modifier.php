@@ -10,8 +10,8 @@ foreach ($arResult['DEAL'] as &$deal) {
         $deal['custom'] = preg_replace('/Маршрут/', $streplace, $deal['custom']);
     }
     if($deal[PLAN_UF]==NO_PLAN_VAL) {
-        $deal['columnClasses']['DEAL_SUMMARY'] = 'redcell';
-        $deal['columnClasses']['ID'] = 'redcell';
+        $deal['columnClasses']['DEAL_SUMMARY'] = NO_PLAN_VAL_class;
+        $deal['columnClasses']['ID'] = NO_PLAN_VAL_class;
     }
 }
 $gridoptions = new \Bitrix\Main\Grid\Options($arResult['GRID_ID']);
