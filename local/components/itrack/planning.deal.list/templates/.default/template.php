@@ -356,6 +356,7 @@ foreach($arResult['DEAL'] as $sKey =>  $arDeal)
             'parent_id' => $arDeal['parent_id'],
             'group_id' => $arDeal['group_id'],
             'expand' => $arDeal['expand'],
+            'columnClasses' => $arDeal['columnClasses'],
             'parent_group_id' => $arDeal['parent_group_id'],
             'attrs' => $arDeal['attrs'],
             'actions' => $arActions,

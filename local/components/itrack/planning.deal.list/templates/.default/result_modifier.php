@@ -9,6 +9,10 @@ foreach ($arResult['DEAL'] as &$deal) {
             .', оговариваемый объем ДФЭ:'.$arResult['GROUPDEAL'][$deal['group_id']]['dfe'];
         $deal['custom'] = preg_replace('/Маршрут/', $streplace, $deal['custom']);
     }
+    if($deal[PLAN_UF]==NO_PLAN_VAL) {
+        $deal['columnClasses']['DEAL_SUMMARY'] = 'redcell';
+        $deal['columnClasses']['ID'] = 'redcell';
+    }
 }
 $gridoptions = new \Bitrix\Main\Grid\Options($arResult['GRID_ID']);
 $gridoptions->setCollapsedGroups($groups);
