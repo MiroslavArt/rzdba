@@ -61,13 +61,13 @@ class Application
         //define('NO_PLAN_VAL', '33297');
         define('NO_PLAN_VAL', \COption::GetOptionString('itrack.custom', 'main_NO_PLAN_VAL'));
         define('NO_PLAN_VAL_class', \COption::GetOptionString('itrack.custom', 'main_NO_PLAN_VAL_class'));
-        define('main_PROB', \COption::GetOptionString('itrack.custom', 'main_PROB'));
-        define('main_PROB_1_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_1_VAL'));
-        define('main_PROB_1_class', \COption::GetOptionString('itrack.custom', 'main_PROB_1_class'));
-        define('main_PROB_2_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_2_VAL'));
-        define('main_PROB_2_class', \COption::GetOptionString('itrack.custom', 'main_PROB_2_class'));
-        define('main_PROB_3_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_3_VAL'));
-        define('main_PROB_3_class', \COption::GetOptionString('itrack.custom', 'main_PROB_3_class'));
+        define('PROB_UF', \COption::GetOptionString('itrack.custom', 'main_PROB'));
+        define('PROB_1_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_1_VAL'));
+        define('PROB_1_class', \COption::GetOptionString('itrack.custom', 'main_PROB_1_class'));
+        define('PROB_2_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_2_VAL'));
+        define('PROB_2_class', \COption::GetOptionString('itrack.custom', 'main_PROB_2_class'));
+        define('PROB_3_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_3_VAL'));
+        define('PROB_3_class', \COption::GetOptionString('itrack.custom', 'main_PROB_3_class'));
     }
 
 

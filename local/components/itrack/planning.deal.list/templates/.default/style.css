@@ -54,5 +54,17 @@ a.bizproc_status_inprogress {
 }
 
 .redcell {
-	background-color: red !important;
+	background-color: lightcoral !important;
+}
+
+.graycell {
+	background-color: lightgray !important;
+}
+
+.yellowcell {
+	background-color: lightyellow !important;
+}
+
+.greencell {
+	background-color: lightgreen !important;
 }
