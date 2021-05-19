@@ -109,7 +109,7 @@ if ($_REQUEST['MODE'] == 'SEARCH')
 
 		$arFilter = array(
 		    '%NAME' => $arSearch,
-            'PROPERTY_SOSTOYANIE'=>IBPL_SOST
+            '!PROPERTY_SOSTOYANIE'=>IBPL_ZAKR
 		);
 
         $planib = Utils::getIDIblockByCode(IBPL_PLAN, IBPL_TYPE);

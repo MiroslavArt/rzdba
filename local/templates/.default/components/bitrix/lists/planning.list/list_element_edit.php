@@ -1,5 +1,23 @@
 <?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
-?><?$APPLICATION->IncludeComponent("bitrix:lists.element.edit", ".default", array(
+?><?
+$APPLICATION->ShowViewContent('list_detail');
+
+$componentParams['AJAX_MODE'] = 'Y';
+$componentParams['AJAX_OPTION_JUMP'] = 'N';
+$componentParams['AJAX_OPTION_HISTORY'] = 'N';
+$componentParams['GRID_ID_SUFFIX'] = 'IPL';
+$componentParams['DISABLE_NAVIGATION_BAR'] = 'Y';
+$componentParams['HIDE_FILTER'] = true;
+$componentParams['INTERNAL_FILTER'] = [PLAN_UF => $arResult["VARIABLES"]["element_id"]];
+$APPLICATION->IncludeComponent('itrack:planning.deal.list',
+    '.default',
+    $componentParams,
+    false,
+    array('HIDE_ICONS' => 'Y', 'ACTIVE_COMPONENT' => 'Y')
+);
+
+ob_start();
+$APPLICATION->IncludeComponent("bitrix:lists.element.edit", "planning.element.edit", array(
 	"IBLOCK_TYPE_ID" => $arParams["IBLOCK_TYPE_ID"],
 	"IBLOCK_ID" => $arResult["VARIABLES"]["list_id"],
 	"SECTION_ID" => $arResult["VARIABLES"]["section_id"],
@@ -16,4 +34,7 @@
 	"CACHE_TIME" => $arParams["CACHE_TIME"],
 	),
 	$component
-);?>
+);
+$customHtml = ob_get_clean();
+$APPLICATION->AddViewContent('list_detail', $customHtml, 0);
+?>

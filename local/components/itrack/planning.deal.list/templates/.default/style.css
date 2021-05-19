@@ -41,7 +41,7 @@ a.bizproc_status_inprogress {
 }
 
 .tasks-grid-wrapper,
-.tasks-grid-wrapper:hover{
+.tasks-grid-wrapper:hover {
 	display: block;
 	overflow: hidden;
 	height: 46px;
@@ -51,4 +51,20 @@ a.bizproc_status_inprogress {
 	font-family: 'OpenSans-Semibold', "Helvetica Neue", Arial, Helvetica, sans-serif;
 	line-height: 46px;
 	text-align: left;
+}
+
+.redcell {
+	background-color: lightcoral !important;
+}
+
+.graycell {
+	background-color: lightgray !important;
+}
+
+.yellowcell {
+	background-color: lightyellow !important;
+}
+
+.greencell {
+	background-color: lightgreen !important;
 }

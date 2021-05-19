@@ -543,10 +543,20 @@ elseif ($action === 'GET_ROW_COUNT')
 		$options = array();
 	}
 
-	$result = CCrmDeal::GetListEx(array(), $filter, array(), false, array(), $options);
+	$result = CCrmDeal::GetListEx(array(), $filter, false, false, array(DFE_UF, STAT_UF), $options);
+	$totalcount = 0;
+	$dfecount = 0;
+	$approvedcount = 0;
+	while($row = $result->Fetch()){
+		$totalcount++;
+		$dfecount += $row[DFE_UF];
+		if($row[STAT_UF]==APP_STAT) {
+			$approvedcount++;
+		}
+	}
 
-	$text = '';
-	if(is_numeric($result))
+	$text = $totalcount.', из них подтвержденных:'.$approvedcount.'. Сумма ДФЭ:'.$dfecount;
+	/*if(is_numeric($result))
 	{
 		$text = GetMessage('CRM_DEAL_LIST_ROW_COUNT', array('#ROW_COUNT#' => $result));
 		if($text === '')
@@ -554,6 +564,8 @@ elseif ($action === 'GET_ROW_COUNT')
 			$text = $result;
 		}
 	}
+
+	$text = 'Заглушка';*/
 	__CrmDealListEndResponse(array('DATA' => array('TEXT' => $text)));
 }
 ?>

@@ -2389,6 +2389,12 @@ if(!isset($arSort['nearest_activity']))
     if(!array_key_exists($arSelect[DFE_UF])) {
         array_push($arSelect, DFE_UF);
     }
+    if(!array_key_exists($arSelect[PLAN_UF])) {
+        array_push($arSelect, PLAN_UF);
+    }
+    if(!array_key_exists($arSelect[PROB_UF])) {
+        array_push($arSelect, PROB_UF);
+    }
 
 	$dbResult = CCrmDeal::GetListEx(
 		$arSort,

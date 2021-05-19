@@ -365,7 +365,7 @@ class Utils
 
         $elements   =   [];
         $arOrder    =   [];
-        $arSelect   =   ['ID', 'IBLOCK_ID', 'ACTIVE', 'SORT', 'IBLOCK_SECTION', 'CODE', 'NAME', 'PREVIEW_TEXT', 'DETAIL_PAGE_URL', 'PROPERTY_*'];
+        $arSelect   =   ['ID', 'IBLOCK_ID', 'TIMESTAMP_X', 'DATE_CREATE', 'CREATED_BY', 'MODIFIED_BY', 'ACTIVE', 'SORT', 'IBLOCK_SECTION', 'CODE', 'NAME', 'PREVIEW_TEXT', 'DETAIL_PAGE_URL', 'PROPERTY_*'];
         $arFilter   =   ['IBLOCK_ID' => $iblock, 'ACTIVE' => 'Y', 'ID' => $elementID];
 
         $elementsList = \CIBlockElement::GetList($arOrder, $arFilter, false, false, $arSelect);

@@ -19,4 +19,6 @@
 	"CACHE_TIME" => $arParams["CACHE_TIME"],
 	),
 	$component
-);?>
+);
+$APPLICATION->SetTitle("Список планов");
+?>

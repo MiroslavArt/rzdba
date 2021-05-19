@@ -1,6 +1,5 @@
 <?
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/header.php");
-$APPLICATION->SetTitle("Список планов");
 ?>
 <?$APPLICATION->IncludeComponent("bitrix:lists", "planning.list", array(
     "IBLOCK_TYPE_ID" => "lists",
