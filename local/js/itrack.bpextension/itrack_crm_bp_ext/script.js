@@ -1,4 +1,3 @@
-
 BX.namespace('iTrack.Crm.BpExt');
 
 BX.iTrack.Crm.BpExt = {
@@ -8,12 +7,28 @@ BX.iTrack.Crm.BpExt = {
     timelineInstance: null,
     tasks: [],
     init: function () {
-        BX.addCustomEvent('BX.Crm.EntityEditor:onInit', BX.delegate(this.detailHandler, this));
+        if(typeof (BX.Crm.EntityEditor) !== 'undefined') {
+            var editor = BX.Crm.EntityEditor.getDefault();
+            if(editor) {
+                this.detailHandler(editor, {
+                    id: editor._id,
+                    externalContext: editor._externalContextId,
+                    context: editor._contextId,
+                    entityTypeId: editor._entityTypeId,
+                    entityId: editor._entityId,
+                    model: editor._model
+                });
+            } else {
+                BX.addCustomEvent('BX.Crm.EntityEditor:onInit', BX.delegate(this.detailHandler, this));
+            }
+        } else {
+            BX.addCustomEvent('BX.Crm.EntityEditor:onInit', BX.delegate(this.detailHandler, this));
+        }
     },
     detailHandler: function (editor, data) {
-        if(data.hasOwnProperty('entityId') && data.hasOwnProperty('entityTypeId')) {
+        if(data.hasOwnProperty('entityId') && data.hasOwnProperty('model')) {
             this.entityId = data.entityId;
-            this.entityTypeId = data.entityTypeId;
+            this.entityTypeId = data.model.getEntityTypeId();
             if(data.hasOwnProperty('model')) {
                 this.model = data.model;
             }
@@ -45,6 +60,13 @@ BX.iTrack.Crm.BpExt = {
                         || data.HISTORY_ITEM.WORKFLOW_STATUS_NAME === 'Completed') {
                         this.getTasks();
                     }
+                }
+            }
+        }
+        if(command === 'crm_bizproc_task_create') {
+            if(data.hasOwnProperty('TAG')) {
+                if(data.TAG === 'CRM_BP_TASK_' + BX.CrmEntityType.resolveName(this.entityTypeId) + '_' + this.entityId) {
+                    this.getTasks();
                 }
             }
         }
@@ -110,7 +132,7 @@ BX.iTrack.Crm.BpExt = {
                     }
                 }
             );
-            
+
             var index = this.timelineInstance._schedule.calculateItemIndex(newItem);
             var anchor = this.timelineInstance._schedule.createAnchor(index);
             this.timelineInstance._schedule.addItem(newItem, index);
@@ -121,7 +143,7 @@ BX.iTrack.Crm.BpExt = {
 };
 
 BX.ready(function() {
-    if (typeof (BX.iTrack.Crm.CrmScheduleItemBP) === "undefined") {
+    if (typeof (BX.iTrack.Crm.CrmScheduleItemBP) === "undefined" && typeof (BX.CrmScheduleItem) !== 'undefined') {
         BX.iTrack.Crm.CrmScheduleItemBP = function () {
             BX.iTrack.Crm.CrmScheduleItemBP.superclass.constructor.apply(this);
             this._postponeController = null;
