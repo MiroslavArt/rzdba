@@ -164,6 +164,12 @@ $arAllOptions = [
             Loc::getMessage($MODULE_ID.'_PROB_3_class'),
             Option::get($MODULE_ID, '_PROB_3_class'),
             ['text']
+        ],
+        [
+            'main_WF_contract',
+            Loc::getMessage($MODULE_ID.'_WF_contract'),
+            Option::get($MODULE_ID, '_WF_contract'),
+            ['text']
         ]
     ]
 ];

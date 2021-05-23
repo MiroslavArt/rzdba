@@ -68,6 +68,7 @@ class Application
         define('PROB_2_class', \COption::GetOptionString('itrack.custom', 'main_PROB_2_class'));
         define('PROB_3_VAL', \COption::GetOptionString('itrack.custom', 'main_PROB_3_VAL'));
         define('PROB_3_class', \COption::GetOptionString('itrack.custom', 'main_PROB_3_class'));
+        define('WF_contract', \COption::GetOptionString('itrack.custom', 'main_WF_contract'));
     }
 
 
