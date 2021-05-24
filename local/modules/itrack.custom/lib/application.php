@@ -70,6 +70,9 @@ class Application
         define('PROB_3_class', \COption::GetOptionString('itrack.custom', 'main_PROB_3_class'));
         define('WF_contract', \COption::GetOptionString('itrack.custom', 'main_WF_contract'));
         define('IBPL_CONTR', \COption::GetOptionString('itrack.custom', 'main_IBPL_CONTR'));
+        define('OneCDO_serv', \COption::GetOptionString('itrack.custom', 'main_1CDO_serv'));
+        define('OneCDO_login', \COption::GetOptionString('itrack.custom', 'main_1CDO_login'));
+        define('OneCDO_pwd', \COption::GetOptionString('itrack.custom', 'main_1CDO_pwd'));
     }
 
 

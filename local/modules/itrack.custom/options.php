@@ -177,6 +177,26 @@ $arAllOptions = [
             Option::get($MODULE_ID, '_IBPL_CONTR'),
             ['text']
         ]
+    ],
+    '1cint' => [
+        [
+            'main_1CDO_serv',
+            Loc::getMessage($MODULE_ID.'_1CDO_serv'),
+            Option::get($MODULE_ID, '_1CDO_serv'),
+            ['text']
+        ],
+        [
+            'main_1CDO_login',
+            Loc::getMessage($MODULE_ID.'_1CDO_login'),
+            Option::get($MODULE_ID, '_1CDO_login'),
+            ['text']
+        ],
+        [
+            'main_1CDO_pwd',
+            Loc::getMessage($MODULE_ID.'_1CDO_pwd'),
+            Option::get($MODULE_ID, '_1CDO_pwd'),
+            ['text']
+        ]
     ]
 ];
 
@@ -203,6 +223,13 @@ $arTabs = [
         "TAB" => Loc::getMessage($MODULE_ID.'_main'),
         "ICON" => $MODULE_ID . '_settings',
         "TITLE" => Loc::getMessage($MODULE_ID.'_main'),
+        'TYPE' => 'options', //options || rights || user defined
+    ],
+    [
+        "DIV" => "1cint",
+        "TAB" => Loc::getMessage($MODULE_ID.'_1с'),
+        "ICON" => $MODULE_ID . '_settings',
+        "TITLE" => Loc::getMessage($MODULE_ID.'_1с'),
         'TYPE' => 'options', //options || rights || user defined
     ]
 ];
