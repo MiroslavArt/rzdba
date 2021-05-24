@@ -170,6 +170,12 @@ $arAllOptions = [
             Loc::getMessage($MODULE_ID.'_WF_contract'),
             Option::get($MODULE_ID, '_WF_contract'),
             ['text']
+        ],
+        [
+            'main_IBPL_CONTR',
+            Loc::getMessage($MODULE_ID.'_IBPL_CONTR'),
+            Option::get($MODULE_ID, '_IBPL_CONTR'),
+            ['text']
         ]
     ]
 ];

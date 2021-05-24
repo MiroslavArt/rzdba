@@ -2,16 +2,16 @@
 namespace iTrack\BpExtension\EventHandlers;
 
 use Bitrix\Bizproc\Workflow\Entity\WorkflowInstanceTable;
+use Bitrix\Main\Loader;
+use Itrack\Custom\Helpers\Utils;
 
 class Bizproc
 {
 	public static function onTaskAdd($taskId, $arFields)
 	{
-        \Bitrix\Main\Diag\Debug::writeToFile($taskId, "task", "__miros.log");
-	    \Bitrix\Main\Diag\Debug::writeToFile($arFields, "fff", "__miros.log");
 	    \Bitrix\Main\Loader::includeModule('pull');
 		$params = unserialize($arFields['PARAMETERS']);
-        \Bitrix\Main\Diag\Debug::writeToFile($params, "params", "__miros.log");
+
 		if(!empty($params['DOCUMENT_ID'])) {
 			list($module, $entity, $documentId) = \CBPHelper::ParseDocumentId($params['DOCUMENT_ID']);
 			if($module === 'crm') {
@@ -26,23 +26,28 @@ class Bizproc
 						break;
 				}
 			}
-            if(!empty($params['WORKFLOW_ID'])) {
-                $iterator = WorkflowInstanceTable::getList(
-                    array(
-                        'select' => array('WORKFLOW_TEMPLATE_ID'),
-                        'filter' => array(
-                            '=ID' => $params['WORKFLOW_ID'],
-                        ),
-                    )
-                );
-                $row = $iterator->fetch();
-                if($row['WORKFLOW_TEMPLATE_ID']==WF_contract) {
-                    \Bitrix\Main\Diag\Debug::writeToFile($documentId, "docid", "__miros.log");
+            if(!empty($arFields['WORKFLOW_ID'])) {
+                $wfid = $arFields['WORKFLOW_ID'];
+                $workflowState = \CBPStateService::getWorkflowState($wfid);
+                if($workflowState['TEMPLATE_ID']==WF_contract) {
+                    $dealid = preg_replace("/[^\d]/", '', $documentId);
+                    if(Loader::includeModule('crm'))
+                    {
+                       $arDeal = \CCrmDeal::GetByID($dealid);
+                       $ibcont = Utils::getIDIblockByCode(IBPL_CONTR, IBPL_TYPE);
+                       $contracts = Utils::getIBlockElementsByConditions($ibcont, ['PROPERTY_KOMPANIYA'=>$arDeal['COMPANY_ID']]);
+                       if(!empty($contracts)) {
+                           foreach ($contracts as $contract) {
+                               $params['REQUEST'][0]['Options'][$contract['ID']] = $contract['NAME'];
+                           }
+                       }
+
+                       $update = \CBPTaskService::Update($taskId, array(
+                           'PARAMETERS' => $params
+                       ));
+                    }
                 }
             }
 		}
-
-
-
 	}
 }
