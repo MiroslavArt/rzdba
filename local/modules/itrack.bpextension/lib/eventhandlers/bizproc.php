@@ -29,7 +29,7 @@ class Bizproc
             if(!empty($arFields['WORKFLOW_ID'])) {
                 $wfid = $arFields['WORKFLOW_ID'];
                 $workflowState = \CBPStateService::getWorkflowState($wfid);
-                if($workflowState['TEMPLATE_ID']==WF_contract) {
+                if($workflowState['TEMPLATE_ID']==WF_contract && $params['REQUEST'][0]['Name']=='doglist') {
                     $dealid = preg_replace("/[^\d]/", '', $documentId);
                     if(Loader::includeModule('crm'))
                     {
