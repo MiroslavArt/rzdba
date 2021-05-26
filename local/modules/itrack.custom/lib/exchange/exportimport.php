@@ -65,9 +65,18 @@ class ExportImport
         curl_close($ch);
 
         if($obj['UID']) {
-            return $obj['UID'];
+            $response = [
+                'UID' => $obj['UID'],
+                'LINK' =>  $obj['LINK']
+            ];
+            //return $obj['UID'];
         } else {
-            return "Ошибка в процессе создания договора";
+            $response = [
+                'UID' => "Ошибка в процессе создания договора",
+                'LINK' =>  ''
+            ];
+            //return "Ошибка в процессе создания договора";
         }
+        return $response;
     }
 }
