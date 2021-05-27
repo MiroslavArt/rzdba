@@ -35,8 +35,10 @@ class ExportImport
             $dataexport['ExpansionFile'] = end(explode(".", $filename));
             $file = \CFile::MakeFileArray($resObjects['FILE_ID']);
             $dataexport['File'] = base64_encode(file_get_contents($file['tmp_name']));
-            unset($dataexport['Disk_id']);
+
         }
+
+        unset($dataexport['Disk_id']);
 
         echo OneCDO_serv;
         echo OneCDO_login;
