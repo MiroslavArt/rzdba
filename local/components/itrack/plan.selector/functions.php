@@ -242,6 +242,7 @@ class CIntranetUserSelectorHelper
 			}
 
 			$arLastSelected = CUserOptions::GetOption("intranet", "plan_search", array());
+
 			if (is_array($arLastSelected) && $arLastSelected['last_selected'] <> '')
 			{
 				$arLastSelected = array_unique(explode(',', $arLastSelected['last_selected']));
@@ -252,23 +253,25 @@ class CIntranetUserSelectorHelper
 			}
 
 			$arFilter = array('ACTIVE' => 'Y');
-			if ($bSubordinateOnly)
+			/*if ($bSubordinateOnly)
 			{
 				$arFilter["UF_DEPARTMENT"] = $arSubDeps;
 			}
 			else
 			{
 				$arFilter['!UF_DEPARTMENT'] = false;
-			}
+			}*/
 
 			// Prevent using users, that doesn't activate it's account
 			// http://jabber.bx/view.php?id=29118
-			if (IsModuleInstalled('bitrix24'))
+			/*if (IsModuleInstalled('bitrix24'))
 			{
 				$arFilter['CONFIRM_CODE'] = false;
-			}
+			}*/
 
-			$arFilter['ID'] = is_array($arLastSelected) ? implode('|', array_slice($arLastSelected, 0, 10)) : '-1';
+			$arFilter['ID'] = $arLastSelected; //is_array($arLastSelected) ? implode('|', array_slice($arLastSelected, 0, 10)) : '-1';
+
+
 			$planib = Utils::getIDIblockByCode(IBPL_PLAN, IBPL_TYPE);
             $plans = Utils::getIBlockElementsByConditions($planib, $arFilter);
 
