@@ -197,6 +197,68 @@ $arAllOptions = [
             Option::get($MODULE_ID, '_1CDO_pwd'),
             ['text']
         ]
+    ],
+    'STZint' => [
+        [
+            'main_STZ_serv',
+            Loc::getMessage($MODULE_ID.'_STZ_serv'),
+            Option::get($MODULE_ID, '_STZ_serv'),
+            ['text']
+        ],
+        [
+            'main_STZ_db',
+            Loc::getMessage($MODULE_ID.'_STZ_db'),
+            Option::get($MODULE_ID, '_STZ_db'),
+            ['text']
+        ],
+        [
+            'main_STZ_login',
+            Loc::getMessage($MODULE_ID.'_STZ_login'),
+            Option::get($MODULE_ID, '_STZ_login'),
+            ['text']
+        ],
+        [
+            'main_STZ_pwd',
+            Loc::getMessage($MODULE_ID.'_STZ_pwd'),
+            Option::get($MODULE_ID, '_STZ_pwd'),
+            ['text']
+        ],
+        [
+            'main_STZ_implog_IBPL',
+            Loc::getMessage($MODULE_ID.'_STZ_implog_IBPL'),
+            Option::get($MODULE_ID, '_STZ_implog_IBPL'),
+            ['text']
+        ],
+        [
+            'main_WF_copydeal',
+            Loc::getMessage($MODULE_ID.'_WF_copydeal'),
+            Option::get($MODULE_ID, '_WF_copydeal'),
+            ['text']
+        ],
+        [
+            'main_STZ_stagedeal',
+            Loc::getMessage($MODULE_ID.'_STZ_stagedeal'),
+            Option::get($MODULE_ID, '_STZ_stagedeal'),
+            ['text']
+        ],
+        [
+            'main_STZ_zak_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_zak_UF'),
+            Option::get($MODULE_ID.'_STZ_zak_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_carqty_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_carqty_UF'),
+            Option::get($MODULE_ID.'_STZ_carqty_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_contqty_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_contqty_UF'),
+            Option::get($MODULE_ID.'_STZ_contqty_UF'),
+            ['text']
+        ]
     ]
 ];
 
@@ -230,6 +292,13 @@ $arTabs = [
         "TAB" => Loc::getMessage($MODULE_ID.'_1с'),
         "ICON" => $MODULE_ID . '_settings',
         "TITLE" => Loc::getMessage($MODULE_ID.'_1с'),
+        'TYPE' => 'options', //options || rights || user defined
+    ],
+    [
+        "DIV" => "STZint",
+        "TAB" => Loc::getMessage($MODULE_ID.'_STZ'),
+        "ICON" => $MODULE_ID . '_settings',
+        "TITLE" => Loc::getMessage($MODULE_ID.'_STZ'),
         'TYPE' => 'options', //options || rights || user defined
     ]
 ];

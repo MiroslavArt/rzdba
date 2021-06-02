@@ -73,8 +73,17 @@ class Application
         define('OneCDO_serv', \COption::GetOptionString('itrack.custom', 'main_1CDO_serv'));
         define('OneCDO_login', \COption::GetOptionString('itrack.custom', 'main_1CDO_login'));
         define('OneCDO_pwd', \COption::GetOptionString('itrack.custom', 'main_1CDO_pwd'));
+        define('STZ_serv', \COption::GetOptionString('itrack.custom', 'main_STZ_serv'));
+        define('STZ_db', \COption::GetOptionString('itrack.custom', 'main_STZ_db'));
+        define('STZ_login', \COption::GetOptionString('itrack.custom', 'main_STZ_login'));
+        define('STZ_pwd', \COption::GetOptionString('itrack.custom', 'main_STZ_pwd'));
+        define('STZ_implog_IBPL', \COption::GetOptionString('itrack.custom', 'main_STZ_implog_IBPL'));
+        define('STZ_WF_copydeal', \COption::GetOptionString('itrack.custom', 'main_WF_copydeal'));
+        define('STZ_stagedeal', \COption::GetOptionString('itrack.custom', 'main_STZ_stagedeal'));
+        define('STZ_zak_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_zak_UF'));
+        define('STZ_carqty_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_carqty_UF'));
+        define('STZ_contqty_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_contqty_UF'));
     }
-
 
     protected static function initJsHandlers()
     {
