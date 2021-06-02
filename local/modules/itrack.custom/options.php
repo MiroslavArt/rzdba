@@ -52,6 +52,12 @@ $arAllOptions = [
             ['text']
         ],
         [
+            'main_IBPL_PLAN_code',
+            Loc::getMessage($MODULE_ID.'_IBPL_PLAN_code'),
+            Option::get($MODULE_ID, '_IBPL_PLAN_code'),
+            ['text']
+        ],
+        [
             'main_IBPL_SOST',
             Loc::getMessage($MODULE_ID.'_IBPL_SOST'),
             Option::get($MODULE_ID, '_IBPL_SOST'),
@@ -244,19 +250,19 @@ $arAllOptions = [
         [
             'main_STZ_zak_UF',
             Loc::getMessage($MODULE_ID.'_STZ_zak_UF'),
-            Option::get($MODULE_ID.'_STZ_zak_UF'),
+            Option::get($MODULE_ID, '_STZ_zak_UF'),
             ['text']
         ],
         [
             'main_STZ_carqty_UF',
             Loc::getMessage($MODULE_ID.'_STZ_carqty_UF'),
-            Option::get($MODULE_ID.'_STZ_carqty_UF'),
+            Option::get($MODULE_ID, '_STZ_carqty_UF'),
             ['text']
         ],
         [
             'main_STZ_contqty_UF',
             Loc::getMessage($MODULE_ID.'_STZ_contqty_UF'),
-            Option::get($MODULE_ID.'_STZ_contqty_UF'),
+            Option::get($MODULE_ID, '_STZ_contqty_UF'),
             ['text']
         ]
     ]

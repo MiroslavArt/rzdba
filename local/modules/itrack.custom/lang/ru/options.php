@@ -4,6 +4,7 @@ $MESS[$MODULE_ID.'_main'] = 'Основная';
 $MESS[$MODULE_ID.'_IBPL_TYPE'] = 'Тип списка';
 $MESS[$MODULE_ID.'_IBPL_ROUTE'] = 'Cимвольный код ИБ маршруты';
 $MESS[$MODULE_ID.'_IBPL_PLAN'] = 'Cимвольный код ИБ план';
+$MESS[$MODULE_ID.'_IBPL_PLAN_code'] = 'Код ИБ план';
 $MESS[$MODULE_ID.'_IBPL_SOST'] = 'Код свойста плана - Планирование перевозок';
 $MESS[$MODULE_ID.'_IBPL_ZAKR'] = 'Код свойста плана - Закрыт';
 $MESS[$MODULE_ID.'_IBPL_LOGSECT'] = 'Символьный код ИБ лог сектор';

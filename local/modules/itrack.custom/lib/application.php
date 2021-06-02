@@ -5,6 +5,7 @@ namespace iTrack\Custom;
 use Bitrix\Main\Config\Option;
 use Bitrix\Main\EventManager;
 use Bitrix\Main\Page\Asset;
+use Itrack\Custom\Helpers\Utils;
 
 
 class Application
@@ -27,6 +28,7 @@ class Application
         // символьный код ИБ план
         //define('IBPL_PLAN', 'plan');
         define('IBPL_PLAN', \COption::GetOptionString('itrack.custom', 'main_IBPL_PLAN'));
+        define('IBPL_PLAN_code', \COption::GetOptionString('itrack.custom', 'main_IBPL_PLAN_code'));
         // код свойста - 'Планирование перевозок'
         //define('IBPL_SOST', '379');
         define('IBPL_SOST', \COption::GetOptionString('itrack.custom', 'main_IBPL_SOST'));
@@ -83,6 +85,8 @@ class Application
         define('STZ_zak_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_zak_UF'));
         define('STZ_carqty_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_carqty_UF'));
         define('STZ_contqty_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_contqty_UF'));
+
+
     }
 
     protected static function initJsHandlers()
