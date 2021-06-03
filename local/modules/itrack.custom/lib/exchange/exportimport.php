@@ -142,8 +142,9 @@ class ExportImport
             $dogib = Utils::getIDIblockByCode(IBPL_CONTR, IBPL_TYPE);
             $dogval = Utils::getIblockElementByID($dogib, $dataexport['AgreementID']);
             $guid = $dogval['PROPERTIES']['UID']['VALUE'];
-            if($guid && !preg_match("/Ошибка/", $guid)) {
-                $shiporder->addAttribute('AgreementID', $guid);
+            $guidukh = $dogval['PROPERTIES']['UID_UKH']['VALUE'];
+            if($guidukh && !preg_match("/Ошибка/", $guid)) {
+                $shiporder->addAttribute('AgreementID', $guidukh);
             }
         }
 
@@ -303,6 +304,6 @@ class ExportImport
                 }
             }
         }
-        return '\iTrack\Custom\Exchange\exportDealSTZ::importDealSTZ();';
+        return '\iTrack\Custom\Exchange\ExportImport::importDealSTZ();';
     }
 }
