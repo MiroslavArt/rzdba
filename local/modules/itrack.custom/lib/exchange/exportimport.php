@@ -159,7 +159,7 @@ class ExportImport
 
         if($dataexport['DestStationID']) {
             $logib = Utils::getIDIblockByCode(IBPL_LOGSECT, IBPL_TYPE);
-            $ibdept = Utils::getIblockElementByID($logib, $dataexport['SourceStationID']);
+            $ibdept = Utils::getIblockElementByID($logib, $dataexport['DestStationID']);
             $sourcest = $ibdept['PROPERTIES']['KOD_STANTSII']['VALUE'];
             if(intval($sourcest)) {
                 $shiporder->addAttribute('DestStationCode', $sourcest);
