@@ -89,7 +89,7 @@ class ExportImport
     public static function exportDealSTZ($dataexport = array())
     {
         $conn = new \PDO('sqlsrv:Server='.STZ_serv.',4788;Database='.STZ_db.'', STZ_login, STZ_pwd);
-        \Bitrix\Main\Diag\Debug::writeToFile($dataexport, "dataexp", "__miros.log");
+        \Bitrix\Main\Diag\Debug::writeToFile($dataexport, "dataexp".date("d.m.Y G.i.s"), "__stzexp.log");
 
         Loader::includeModule('crm');
         $xmlstr = <<<XML
@@ -242,7 +242,19 @@ class ExportImport
                 foreach ($xml->Documents->ShippingOrders->ShippingOrder as $element) {
 
                     $elementatr = end($element->attributes());
-                    $arDeal = \CCrmDeal::GetByID($elementatr['ID'],false);
+                    \Bitrix\Main\Diag\Debug::writeToFile($elementatr, "импорт из СТЖ".date("d.m.Y G.i.s"), "__stzimp.log");
+                    //$arDeal = \CCrmDeal::GetByID($elementatr['ID'],false);
+                    $arFilter = array(
+                        "ID"=>$elementatr['ID'], //выбираем определенную сделку по ID
+                        "CHECK_PERMISSIONS"=>"N" //не проверять права доступа текущего пользователя
+                    );
+                    $arSelect = array(
+                        "ID",
+                        "STAGE_ID",
+                        "UF_*"
+                    );
+                    $res = \CCrmDeal::GetList(Array(), $arFilter, $arSelect);
+                    $arDeal = $res->fetch();
 
                     if(Loader::includeModule('iblock') && $logib) {
                         $el = new \CIBlockElement;
@@ -258,16 +270,71 @@ class ExportImport
                                 'REZULTAT_IMPORTA' => 'Ошибка обновления, сделка не находится на этапе Успешная воронки Прием заказа'
                             ];
                         } elseif ($arDeal['STAGE_ID']==STZ_stagedeal) {
+                            if($elementatr['DocStateName']) {
+                                $stagestz = current(Utils::getIBlockElementsByConditions(STZ_IBPL_STATUS, ['NAME'=>$elementatr['DocStateName']], ['NAME'=>'desc']));
+                            }
+
+                            $arParams = array();
+
                             $deal=new \CCrmDeal(false);
-                            $arParams = array(
+                            if($elementatr['Number'] && $arDeal[STZ_zak_UF]!=$elementatr['Number']) {
+                                $arParams = array_merge($arParams, [STZ_zak_UF=> $elementatr['Number']]);
+                            }
+
+                            if($elementatr['CarQuantity'] && $arDeal[STZ_carqty_UF]!=$elementatr['Number']) {
+                                $arParams = array_merge($arParams, [STZ_carqty_UF=>$elementatr['CarQuantity']]);
+                            }
+
+                            if($elementatr['ContainerQuantity'] && $arDeal[STZ_contqty_UF]!=$elementatr['Number']) {
+                                $arParams = array_merge($arParams, [STZ_contqty_UF=>$elementatr['ContainerQuantity']]);
+                            }
+
+                            if($elementatr['Rate'] && $arDeal[STZ_rate_UF]!=$elementatr['Rate']) {
+                                $arParams = array_merge($arParams, [STZ_rate_UF => $elementatr['Rate']]);
+                            }
+
+                            if($elementatr['Dfe'] && $arDeal[STZ_DFE_UF]!=$elementatr['Dfe']) {
+                                $arParams = array_merge($arParams, [STZ_DFE_UF => $elementatr['Dfe']]);
+                            }
+
+                            if($elementatr['ContainerIssueDate'] && strtotime($arDeal[STZ_vyd_UF])!=strtotime($elementatr['ContainerIssueDate'])) {
+                                $arParams = array_merge($arParams, [STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['ContainerIssueDate']))]);
+                            }
+
+                            if($elementatr['CarLoadingDate'] && strtotime($arDeal[STZ_pogr_UF])!=strtotime($elementatr['CarLoadingDate'])) {
+                                $arParams = array_merge($arParams, [STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate']))]);
+                            }
+
+                            if($elementatr['CarReleaseDate'] && strtotime($arDeal[STZ_osv_UF])!=strtotime($elementatr['CarReleaseDate'])) {
+                                $arParams = array_merge($arParams, [STZ_osv_UF => date("d.m.Y", strtotime($elementatr['CarReleaseDate']))]);
+                            }
+
+                            if($elementatr['Amount'] && $arDeal[STZ_cash_UF]!=$elementatr['Amount']) {
+                                $arParams = array_merge($arParams, [STZ_cash_UF => preg_replace("/[^\d]/", '', $elementatr['Amount'])]);
+                            }
+
+                            if($elementatr['DocStateName'] && $arDeal[STZ_status_UF]!=$stagestz['ID']) {
+                                $arParams = array_merge($arParams, [STZ_status_UF => $stagestz['ID']]);
+                            }
+
+                            /*$arParams = array(
                                 STZ_zak_UF=> $elementatr['Number'],
                                 STZ_carqty_UF=>$elementatr['CarQuantity'],
-                                STZ_contqty_UF=>$elementatr['ContainerQuantity']
-                            );
+                                STZ_contqty_UF=>$elementatr['ContainerQuantity'],
+                                STZ_rate_UF => $elementatr['Rate'],
+                                STZ_DFE_UF => $elementatr['Dfe'],
+                                STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['ContainerIssueDate'])),
+                                STZ_pogr_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate'])),
+                                STZ_osv_UF => date("d.m.Y", strtotime($elementatr['CarReleaseDate'])),
+                                STZ_cash_UF => date("d.m.Y", strtotime($elementatr['CarReleaseDate'])),
+                                STZ_status_UF => $stagestz['ID']
+                            );*/
 
-                            $res = $deal->Update($arDeal['ID'],$arParams);
+                            if($arParams) {
+                                $res = $deal->Update($arDeal['ID'],$arParams);
+                            }
 
-                            if($res=='1') {
+                            if(!$arDeal[STZ_zak_UF]) {
                                 if(Loader::includeModule("bizproc"))
                                 {
                                     $deal = 'DEAL_'.$arDeal['ID'];
@@ -278,17 +345,111 @@ class ExportImport
                                         $arErrorsTmp
                                     );
                                 }
-                                $PROP = [
-                                    'DATA_IMPORTA' => date('d.m.Y'),
-                                    'ID_SDELKI' => $elementatr['ID'],
-                                    'REZULTAT_IMPORTA' => 'Сделка успешно обновлена'
-                                ];
+                                if($res=='1') {
+                                    $PROP = [
+                                        'DATA_IMPORTA' => date('d.m.Y'),
+                                        'ID_SDELKI' => $elementatr['ID'],
+                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'успешно обновлена и скопирована в воронку Исполнение заказа'
+                                    ];
+                                } else {
+                                    $PROP = [
+                                        'DATA_IMPORTA' => date('d.m.Y'),
+                                        'ID_SDELKI' => $elementatr['ID'],
+                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'не обновлена, но скопирована в воронку Исполнение заказа'
+                                    ];
+                                }
                             } else {
-                                $PROP = [
+                                $arFilter = array(
+                                    STZ_zak_UF =>$elementatr['Number'], //выбираем определенную сделку по ID
+                                    "CHECK_PERMISSIONS"=>"N" //не проверять права доступа текущего пользователя
+                                );
+                                $arSelect = array(
+                                    "ID",
+                                    "STAGE_ID",
+                                    "UF_*"
+                                );
+                                $resd = \CCrmDeal::GetList(Array(), $arFilter, $arSelect);
+                                $updateddeals = [];
+
+
+                                while($arCopydeal = $resd->fetch()) {
+                                    $arParams = array();
+
+                                    if($elementatr['Number'] && $arCopydeal[STZ_zak_UF]!=$elementatr['Number']) {
+                                        $arParams = array_merge($arParams, [STZ_zak_UF=> $elementatr['Number']]);
+                                    }
+
+                                    if($elementatr['CarQuantity'] && $arCopydeal[STZ_carqty_UF]!=$elementatr['Number']) {
+                                        $arParams = array_merge($arParams, [STZ_carqty_UF=>$elementatr['CarQuantity']]);
+                                    }
+
+                                    if($elementatr['ContainerQuantity'] && $arCopydeal[STZ_contqty_UF]!=$elementatr['Number']) {
+                                        $arParams = array_merge($arParams, [STZ_contqty_UF=>$elementatr['ContainerQuantity']]);
+                                    }
+
+                                    if($elementatr['Rate'] && $arCopydeal[STZ_rate_UF]!=$elementatr['Rate']) {
+                                        $arParams = array_merge($arParams, [STZ_rate_UF => $elementatr['Rate']]);
+                                    }
+
+                                    if($elementatr['Dfe'] && $arCopydeal[STZ_DFE_UF]!=$elementatr['Dfe']) {
+                                        $arParams = array_merge($arParams, [STZ_DFE_UF => $elementatr['Dfe']]);
+                                    }
+
+                                    if($elementatr['ContainerIssueDate'] && strtotime($arCopydeal[STZ_vyd_UF])!=strtotime($elementatr['ContainerIssueDate'])) {
+                                        $arParams = array_merge($arParams, [STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['ContainerIssueDate']))]);
+                                    }
+
+                                    if($elementatr['CarLoadingDate'] && strtotime($arCopydeal[STZ_pogr_UF])!=strtotime($elementatr['CarLoadingDate'])) {
+                                        $arParams = array_merge($arParams, [STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate']))]);
+                                    }
+
+                                    if($elementatr['CarReleaseDate'] && strtotime($arCopydeal[STZ_osv_UF])!=strtotime($elementatr['CarReleaseDate'])) {
+                                        $arParams = array_merge($arParams, [STZ_osv_UF => date("d.m.Y", strtotime($elementatr['CarReleaseDate']))]);
+                                    }
+
+                                    if($elementatr['Amount'] && $arCopydeal[STZ_cash_UF]!=$elementatr['Amount']) {
+                                        $arParams = array_merge($arParams, [STZ_cash_UF => preg_replace("/[^\d]/", '', $elementatr['Amount'])]);
+                                    }
+
+                                    if($elementatr['DocStateName'] && $arCopydeal[STZ_status_UF]!=$stagestz['ID']) {
+                                        $arParams = array_merge($arParams, [STZ_status_UF => $stagestz]);
+                                    }
+
+                                    if($elementatr['DocStateName'] && $arCopydeal['STAGE_ID']!=$stagestz['PROPERTIES']['KOD_ETAPA_SDELKI']['VALUE']) {
+                                        $arParams = array_merge($arParams, ['STAGE_ID' => $stagestz['PROPERTIES']['KOD_ETAPA_SDELKI']['VALUE']]);
+                                    }
+                                    if($arParams) {
+                                        $resud = $deal->Update($arCopydeal['ID'],$arParams);
+                                        if($resud==1) {
+                                            array_push($updateddeals, $arCopydeal['ID']);
+                                        }
+                                    }
+                                }
+                                if($res=='1' && $updateddeals) {
+                                    $PROP = [
+                                        'DATA_IMPORTA' => date('d.m.Y'),
+                                        'ID_SDELKI' => $elementatr['ID'],
+                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'успешно обновлена, 
+                                            также обновлены сделки в воронке приема заказа:'.implode(",", $updateddeals)
+                                    ];
+                                } elseif($res=='1' && !$updateddeals) {
+                                    $PROP = [
+                                        'DATA_IMPORTA' => date('d.m.Y'),
+                                        'ID_SDELKI' => $elementatr['ID'],
+                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'успешно обновлена, скопированные сделки не найдены'
+                                    ];
+                                } else {
+                                    $PROP = [
+                                        'DATA_IMPORTA' => date('d.m.Y'),
+                                        'ID_SDELKI' => $elementatr['ID'],
+                                        'REZULTAT_IMPORTA' => 'Обновление сделок не имело места'
+                                    ];
+                                }
+                                /*$PROP = [
                                     'DATA_IMPORTA' => date('d.m.Y'),
                                     'ID_SDELKI' => $elementatr['ID'],
                                     'REZULTAT_IMPORTA' => 'Сделка найдена, но в процессе обновления возникла ошибка'
-                                ];
+                                ];*/
                             }
                         }
 
