@@ -302,7 +302,7 @@ class ExportImport
                             }
 
                             if($elementatr['CarLoadingDate'] && strtotime($arDeal[STZ_pogr_UF])!=strtotime($elementatr['CarLoadingDate'])) {
-                                $arParams = array_merge($arParams, [STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate']))]);
+                                $arParams = array_merge($arParams, [STZ_pogr_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate']))]);
                             }
 
                             if($elementatr['CarReleaseDate'] && strtotime($arDeal[STZ_osv_UF])!=strtotime($elementatr['CarReleaseDate'])) {
@@ -349,19 +349,20 @@ class ExportImport
                                     $PROP = [
                                         'DATA_IMPORTA' => date('d.m.Y'),
                                         'ID_SDELKI' => $elementatr['ID'],
-                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'успешно обновлена и скопирована в воронку Исполнение заказа'
+                                        'REZULTAT_IMPORTA' => 'Сделка '.$elementatr['ID'].' успешно обновлена и скопирована в воронку Исполнение заказа'
                                     ];
                                 } else {
                                     $PROP = [
                                         'DATA_IMPORTA' => date('d.m.Y'),
                                         'ID_SDELKI' => $elementatr['ID'],
-                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'не обновлена, но скопирована в воронку Исполнение заказа'
+                                        'REZULTAT_IMPORTA' => 'Сделка '.$elementatr['ID'].' не обновлена, но скопирована в воронку Исполнение заказа'
                                     ];
                                 }
                             } else {
                                 $arFilter = array(
                                     STZ_zak_UF =>$elementatr['Number'], //выбираем определенную сделку по ID
-                                    "CHECK_PERMISSIONS"=>"N" //не проверять права доступа текущего пользователя
+                                    "CHECK_PERMISSIONS"=>"N", //не проверять права доступа текущего пользователя
+                                    "!STAGE_ID" => STZ_stagedeal
                                 );
                                 $arSelect = array(
                                     "ID",
@@ -400,7 +401,7 @@ class ExportImport
                                     }
 
                                     if($elementatr['CarLoadingDate'] && strtotime($arCopydeal[STZ_pogr_UF])!=strtotime($elementatr['CarLoadingDate'])) {
-                                        $arParams = array_merge($arParams, [STZ_vyd_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate']))]);
+                                        $arParams = array_merge($arParams, [STZ_pogr_UF => date("d.m.Y", strtotime($elementatr['CarLoadingDate']))]);
                                     }
 
                                     if($elementatr['CarReleaseDate'] && strtotime($arCopydeal[STZ_osv_UF])!=strtotime($elementatr['CarReleaseDate'])) {
@@ -429,14 +430,14 @@ class ExportImport
                                     $PROP = [
                                         'DATA_IMPORTA' => date('d.m.Y'),
                                         'ID_SDELKI' => $elementatr['ID'],
-                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'успешно обновлена, 
+                                        'REZULTAT_IMPORTA' => 'Сделка '.$elementatr['ID'].' успешно обновлена, 
                                             также обновлены сделки в воронке приема заказа:'.implode(",", $updateddeals)
                                     ];
                                 } elseif($res=='1' && !$updateddeals) {
                                     $PROP = [
                                         'DATA_IMPORTA' => date('d.m.Y'),
                                         'ID_SDELKI' => $elementatr['ID'],
-                                        'REZULTAT_IMPORTA' => 'Сделка'.$elementatr['ID'].'успешно обновлена, скопированные сделки не найдены'
+                                        'REZULTAT_IMPORTA' => 'Сделка '.$elementatr['ID'].' успешно обновлена, скопированные сделки не найдены'
                                     ];
                                 } else {
                                     $PROP = [
