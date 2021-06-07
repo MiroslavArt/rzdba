@@ -81,12 +81,21 @@ class Application
         define('STZ_pwd', \COption::GetOptionString('itrack.custom', 'main_STZ_pwd'));
         define('STZ_implog_IBPL', \COption::GetOptionString('itrack.custom', 'main_STZ_implog_IBPL'));
         define('STZ_WF_copydeal', \COption::GetOptionString('itrack.custom', 'main_WF_copydeal'));
+        define('STZ_WF_export', \COption::GetOptionString('itrack.custom', 'main_STZ_WF_export'));
         define('STZ_stagedeal', \COption::GetOptionString('itrack.custom', 'main_STZ_stagedeal'));
         define('STZ_zak_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_zak_UF'));
         define('STZ_carqty_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_carqty_UF'));
         define('STZ_contqty_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_contqty_UF'));
-
-
+        define('STZ_carowner_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_carowner_UF'));
+        define('STZ_rate_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_rate_UF'));
+        define('STZ_DFE_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_DFE_UF'));
+        define('STZ_vyd_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_vyd_UF'));
+        define('STZ_pogr_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_pogr_UF'));
+        define('STZ_osv_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_osv_UF'));
+        define('STZ_cash_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_cash_UF'));
+        define('STZ_type_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_type_UF'));
+        define('STZ_status_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_status_UF'));
+        define('STZ_IBPL_STATUS', \COption::GetOptionString('itrack.custom', 'main_STZ_IBPL_STATUS'));
     }
 
     protected static function initJsHandlers()

@@ -236,6 +236,12 @@ $arAllOptions = [
             ['text']
         ],
         [
+            'main_STZ_WF_export',
+            Loc::getMessage($MODULE_ID.'_STZ_WF_export'),
+            Option::get($MODULE_ID, '_STZ_WF_export'),
+            ['text']
+        ],
+        [
             'main_WF_copydeal',
             Loc::getMessage($MODULE_ID.'_WF_copydeal'),
             Option::get($MODULE_ID, '_WF_copydeal'),
@@ -263,6 +269,66 @@ $arAllOptions = [
             'main_STZ_contqty_UF',
             Loc::getMessage($MODULE_ID.'_STZ_contqty_UF'),
             Option::get($MODULE_ID, '_STZ_contqty_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_carowner_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_carowner_UF'),
+            Option::get($MODULE_ID, '_STZ_carowner_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_rate_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_rate_UF'),
+            Option::get($MODULE_ID, '_STZ_rate_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_DFE_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_DFE_UF'),
+            Option::get($MODULE_ID, '_STZ_DFE_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_vyd_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_vyd_UF'),
+            Option::get($MODULE_ID, '_STZ_vyd_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_pogr_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_pogr_UF'),
+            Option::get($MODULE_ID, '_STZ_pogr_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_osv_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_osv_UF'),
+            Option::get($MODULE_ID, '_STZ_osv_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_cash_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_cash_UF'),
+            Option::get($MODULE_ID, '_STZ_cash_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_type_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_type_UF'),
+            Option::get($MODULE_ID, '_STZ_type_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_status_UF',
+            Loc::getMessage($MODULE_ID.'_STZ_status_UF'),
+            Option::get($MODULE_ID, '_STZ_status_UF'),
+            ['text']
+        ],
+        [
+            'main_STZ_IBPL_STATUS',
+            Loc::getMessage($MODULE_ID.'_STZ_IBPL_STATUS'),
+            Option::get($MODULE_ID, '_STZ_IBPL_STATUS'),
             ['text']
         ]
     ]
