@@ -641,6 +641,20 @@ if(!$isInternal
 		//region Create call list
 		//endregion
 		//region Refresh Accounting Data
+        $actionList[] = array(
+            'NAME' => GetMessage('CRM_DEAL_STZ'),
+            'VALUE' => 'sendstz',
+            'ONCHANGE' => array(
+                array(
+                    'ACTION' => Bitrix\Main\Grid\Panel\Actions::CREATE,
+                    'DATA' => array($applyButton)
+                ),
+                array(
+                    'ACTION' => Bitrix\Main\Grid\Panel\Actions::CALLBACK,
+                    'DATA' => array(array('JS' => "BX.CrmUIGridExtension.processActionChange('{$gridManagerID}', 'sendstz')"))
+                )
+            )
+        );
 	}
 
 	if($allowWrite)

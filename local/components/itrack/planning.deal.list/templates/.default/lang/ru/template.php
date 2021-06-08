@@ -1,6 +1,7 @@
 <?
 $MESS["CRM_ALL"] = "Всего";
 $MESS["CRM_DEAL_SHOW_TITLE"] = "Просмотреть сделку";
+$MESS["CRM_DEAL_STZ"] = "Перенести в СТЖ";
 $MESS["CRM_DEAL_SHOW"] = "Просмотреть";
 $MESS["CRM_DEAL_TASK_TITLE"] = "Добавить задачу";
 $MESS["CRM_DEAL_TASK"] = "Добавить задачу";

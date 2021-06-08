@@ -21,7 +21,7 @@ if (!CModule::IncludeModule('crm'))
 	$errorMessage = GetMessage('CRM_MODULE_NOT_INSTALLED');
 	$isErrorOccured = true;
 }
-
+//\Bitrix\Main\Diag\Debug::writeToFile($_POST, "post", "__miros.log");
 $isBizProcInstalled = IsModuleInstalled('bizproc');
 if (!$isErrorOccured && $isBizProcInstalled)
 {
@@ -1291,42 +1291,53 @@ if($actionData['ACTIVE'])
 				}
 			}
 		}
-		elseif($actionData['NAME'] == 'tasks')
+		elseif($actionData['NAME'] == 'sendstz')
 		{
-			if (isset($actionData['ID']) && is_array($actionData['ID']))
+			// iTrack - отправка в СТЖ вместо постановки задачи
+		    if (isset($actionData['ID']) && is_array($actionData['ID']))
 			{
 				$arTaskID = array();
 				foreach($actionData['ID'] as $ID)
 				{
-					$arTaskID[] = 'D_'.$ID;
+					//$arTaskID[] = 'D_'.$ID;
+                    if(CModule::IncludeModule('bizproc'))
+                    {
+                        $deal = 'DEAL_'.$ID;
+                        $wfId = \CBPDocument::StartWorkflow(
+                            STZ_WF_export,
+                            array("crm","CCrmDocumentDeal", $deal),
+                            [],
+                            $arErrorsTmp
+                        );
+                    }
 				}
 
-				$APPLICATION->RestartBuffer();
+                /*$APPLICATION->RestartBuffer();
 
-				$taskUrl = CHTTP::urlAddParams(
-					CComponentEngine::MakePathFromTemplate(
-						COption::GetOptionString('tasks', 'paths_task_user_edit', ''),
-						array(
-							'task_id' => 0,
-							'user_id' => $userID
-						)
-					),
-					array(
-						'UF_CRM_TASK' => implode(';', $arTaskID),
-						'TITLE' => urlencode(GetMessage('CRM_TASK_TITLE_PREFIX')),
-						'TAGS' => urlencode(GetMessage('CRM_TASK_TAG')),
-						'back_url' => urlencode($arParams['PATH_TO_DEAL_LIST'])
-					)
-				);
-				if ($actionData['AJAX_CALL'])
-				{
-					echo '<script> parent.window.location = "'.CUtil::JSEscape($taskUrl).'";</script>';
-					exit();
-				}
-				else
-				{
-					LocalRedirect($taskUrl);
-				}
+                $taskUrl = CHTTP::urlAddParams(
+                    CComponentEngine::MakePathFromTemplate(
+                        COption::GetOptionString('tasks', 'paths_task_user_edit', ''),
+                        array(
+                            'task_id' => 0,
+                            'user_id' => $userID
+                        )
+                    ),
+                    array(
+                        'UF_CRM_TASK' => implode(';', $arTaskID),
+                        'TITLE' => urlencode(GetMessage('CRM_TASK_TITLE_PREFIX')),
+                        'TAGS' => urlencode(GetMessage('CRM_TASK_TAG')),
+                        'back_url' => urlencode($arParams['PATH_TO_DEAL_LIST'])
+                    )
+                );
+                if ($actionData['AJAX_CALL'])
+                {
+                    echo '<script> parent.window.location = "'.CUtil::JSEscape($taskUrl).'";</script>';
+                    exit();
+                }
+                else
+                {
+                    LocalRedirect($taskUrl);
+                }*/
 			}
 		}
 		elseif($actionData['NAME'] == 'set_stage')
@@ -1420,7 +1431,8 @@ if($actionData['ACTIVE'])
 		}
 		elseif($actionData['NAME'] == 'assign_to')
 		{
-			if(isset($actionData['ASSIGNED_BY_ID']))
+            // iTrack - назначение плана
+		    if(isset($actionData['ASSIGNED_BY_ID']))
 			{
 				$arIDs = array();
 				if ($actionData['ALL_ROWS'])
@@ -1476,7 +1488,7 @@ if($actionData['ACTIVE'])
 		}
 		elseif($actionData['NAME'] == 'mark_as_opened')
 		{
-            // смена статуса сделки
+            // iTrack - смена статуса
 		    if(isset($actionData['OPENED']))
             {
                 $arIDs = array();
