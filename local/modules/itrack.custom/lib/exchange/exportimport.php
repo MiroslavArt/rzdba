@@ -110,6 +110,8 @@ class ExportImport
             $shiporder->addAttribute('ID', $dataexport['ID']);
         }
 
+        $shiporder->addAttribute('DocumentDate', date('Y-m-d'));
+
         if($dataexport['ContractorID']) {
             $res = \CCrmCompany::GetListEx(
                 $arOrder = array(),
@@ -179,6 +181,9 @@ class ExportImport
             $shiporder->addAttribute('ManagerEMail', $dataexport['ManagerEMail']);
         }
 
+        if($dataexport['RequestType']) {
+            $shiporder->addAttribute('KindID', $dataexport['RequestType']);
+        }
 
         $xml = $sxe->asXML();
         echo $xml;
@@ -294,7 +299,7 @@ class ExportImport
                             }
 
                             if($elementatr['Dfe'] && $arDeal[STZ_DFE_UF]!=$elementatr['Dfe']) {
-                                $arParams = array_merge($arParams, [STZ_DFE_UF => $elementatr['Dfe']]);
+                                $arParams = array_merge($arParams, [STZ_DFE_UF => preg_replace("/[^\d]/", '', $elementatr['Dfe'])]);
                             }
 
                             if($elementatr['ContainerIssueDate'] && strtotime($arDeal[STZ_vyd_UF])!=strtotime($elementatr['ContainerIssueDate'])) {
@@ -315,6 +320,13 @@ class ExportImport
 
                             if($elementatr['DocStateName'] && $arDeal[STZ_status_UF]!=$stagestz['ID']) {
                                 $arParams = array_merge($arParams, [STZ_status_UF => $stagestz['ID']]);
+                            }
+                            if(array_key_exists('ShippingType', $elementatr)) {
+                                if($elementatr['ShippingType']==0 && $arDeal[STZ_type_UF]!=STZ_type_por) {
+                                    $arParams = array_merge($arParams, [STZ_type_UF => STZ_type_por]);
+                                } elseif($elementatr['ShippingType']==1 && $arDeal[STZ_type_UF]!=STZ_type_gru) {
+                                    $arParams = array_merge($arParams, [STZ_type_UF => STZ_type_gru]);
+                                }
                             }
 
                             /*$arParams = array(
@@ -410,6 +422,14 @@ class ExportImport
 
                                     if($elementatr['Amount'] && $arCopydeal[STZ_cash_UF]!=$elementatr['Amount']) {
                                         $arParams = array_merge($arParams, [STZ_cash_UF => preg_replace("/[^\d]/", '', $elementatr['Amount'])]);
+                                    }
+
+                                    if(array_key_exists('ShippingType', $elementatr)) {
+                                        if($elementatr['ShippingType']==0 && $arCopydeal[STZ_type_UF]!=STZ_type_por) {
+                                            $arParams = array_merge($arParams, [STZ_type_UF => STZ_type_por]);
+                                        } elseif($elementatr['ShippingType']==1 && $arCopydeal[STZ_type_UF]!=STZ_type_gru) {
+                                            $arParams = array_merge($arParams, [STZ_type_UF => STZ_type_gru]);
+                                        }
                                     }
 
                                     if($elementatr['DocStateName'] && $arCopydeal[STZ_status_UF]!=$stagestz['ID']) {

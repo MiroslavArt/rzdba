@@ -320,6 +320,18 @@ $arAllOptions = [
             ['text']
         ],
         [
+            'main_STZ_type_por',
+            Loc::getMessage($MODULE_ID.'_STZ_type_por'),
+            Option::get($MODULE_ID, '_STZ_type_por'),
+            ['text']
+        ],
+        [
+            'main_STZ_type_gru',
+            Loc::getMessage($MODULE_ID.'_STZ_type_gru'),
+            Option::get($MODULE_ID, '_STZ_type_gru'),
+            ['text']
+        ],
+        [
             'main_STZ_status_UF',
             Loc::getMessage($MODULE_ID.'_STZ_status_UF'),
             Option::get($MODULE_ID, '_STZ_status_UF'),

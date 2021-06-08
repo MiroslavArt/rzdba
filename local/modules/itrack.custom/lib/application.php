@@ -94,6 +94,8 @@ class Application
         define('STZ_osv_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_osv_UF'));
         define('STZ_cash_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_cash_UF'));
         define('STZ_type_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_type_UF'));
+        define('STZ_type_por', \COption::GetOptionString('itrack.custom', 'main_STZ_type_por'));
+        define('STZ_type_gru', \COption::GetOptionString('itrack.custom', 'main_STZ_type_gru'));
         define('STZ_status_UF', \COption::GetOptionString('itrack.custom', 'main_STZ_status_UF'));
         define('STZ_IBPL_STATUS', \COption::GetOptionString('itrack.custom', 'main_STZ_IBPL_STATUS'));
     }

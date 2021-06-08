@@ -1294,23 +1294,28 @@ if($actionData['ACTIVE'])
 		elseif($actionData['NAME'] == 'sendstz')
 		{
 			// iTrack - отправка в СТЖ вместо постановки задачи
-		    if (isset($actionData['ID']) && is_array($actionData['ID']))
-			{
+            $arIDs = [];
+            if ($actionData['ALL_ROWS'])
+            {
+                $arActionFilter = $arFilter;
+                $arActionFilter['CHECK_PERMISSIONS'] = 'N'; // Ignore 'WRITE' permission - we will check it before update.
+                $arActionFilter['!'.ROUTE_UF] = false;
+
+                $dbRes = CCrmDeal::GetListEx(array(), $arActionFilter, false, false, array('ID'));
+                while($arDeal = $dbRes->Fetch())
+                {
+                    $arIDs[] = $arDeal['ID'];
+                }
+            } elseif (isset($actionData['ID']) && is_array($actionData['ID'])) {
 				$arTaskID = array();
 				foreach($actionData['ID'] as $ID)
 				{
-					//$arTaskID[] = 'D_'.$ID;
-                    if(CModule::IncludeModule('bizproc'))
-                    {
-                        $deal = 'DEAL_'.$ID;
-                        $wfId = \CBPDocument::StartWorkflow(
-                            STZ_WF_export,
-                            array("crm","CCrmDocumentDeal", $deal),
-                            [],
-                            $arErrorsTmp
-                        );
-                    }
+                    $arIDs[] = $ID;
+
+                    //$arTaskID[] = 'D_'.$ID;
+
 				}
+
 
                 /*$APPLICATION->RestartBuffer();
 
@@ -1339,6 +1344,20 @@ if($actionData['ACTIVE'])
                     LocalRedirect($taskUrl);
                 }*/
 			}
+            $arIDs = array_unique($arIDs);
+
+            foreach($arIDs as $ID) {
+                if(CModule::IncludeModule('bizproc'))
+                {
+                    $deal = 'DEAL_'.$ID;
+                    $wfId = \CBPDocument::StartWorkflow(
+                        STZ_WF_export,
+                        array("crm","CCrmDocumentDeal", $deal),
+                        [],
+                        $arErrorsTmp
+                    );
+                }
+            }
 		}
 		elseif($actionData['NAME'] == 'set_stage')
 		{
