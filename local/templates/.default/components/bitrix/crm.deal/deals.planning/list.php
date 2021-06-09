@@ -26,6 +26,29 @@ else
 		$this->EndViewTarget();
 	}
 
+    $this->SetViewTarget('pagetitle');
+    $APPLICATION->IncludeComponent(
+        'itrack:planning.deal.menu',
+        '',
+        array(
+            'PATH_TO_DEAL_LIST' => $arResult['PATH_TO_DEAL_LIST'],
+            'PATH_TO_DEAL_SHOW' => $arResult['PATH_TO_DEAL_SHOW'],
+            'PATH_TO_DEAL_EDIT' => $arResult['PATH_TO_DEAL_EDIT'],
+            'PATH_TO_DEAL_FUNNEL' => $arResult['PATH_TO_DEAL_FUNNEL'],
+            'PATH_TO_DEAL_IMPORT' => $arResult['PATH_TO_DEAL_IMPORT'],
+            'PATH_TO_DEAL_RECUR' => $arResult['PATH_TO_DEAL_RECUR'],
+            'PATH_TO_DEAL_RECUR_CATEGORY' => $arResult['PATH_TO_DEAL_RECUR_CATEGORY'],
+            'IS_RECURRING' => $arResult['IS_RECURRING'],
+            'ELEMENT_ID' => 0,
+            'CATEGORY_ID' => $categoryID,
+            'TYPE' => 'list',
+            'DISABLE_IMPORT' => 'Y',
+            'DISABLE_DEDUPE' => 'Y'
+        ),
+        $component
+    );
+    $this->EndViewTarget();
+
 	$APPLICATION->IncludeComponent(
 		'bitrix:ui.sidepanel.wrapper',
 		'',
