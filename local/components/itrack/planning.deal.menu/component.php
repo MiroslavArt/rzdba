@@ -478,7 +478,8 @@ if($arParams['TYPE'] === 'list')
 		}
 
 		$stExportId = 'EXPORT_'. \CCrmOwnerType::DealName;
-		$componentName = 'bitrix:crm.deal.list';
+		//$componentName = 'bitrix:crm.deal.list';
+        $componentName = 'itrack:planning.deal.list';
 
 		// itrack - перечисляем все маршруты
 

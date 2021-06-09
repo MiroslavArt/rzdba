@@ -3270,7 +3270,7 @@ else
 
 		return array(
 			'PROCESSED_ITEMS' => count($arResult['DEAL']),
-			'TOTAL_ITEMS' => $arResult['STEXPORT_TOTAL_ITEMS']
+			'TOTAL_ITEMS' => count($arResult['DEAL'])
 		);
 	}
 	else
