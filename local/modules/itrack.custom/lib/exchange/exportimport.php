@@ -224,7 +224,7 @@ class ExportImport
         } else {
             $lastrv = 0;
         }
-
+        \Bitrix\Main\Diag\Debug::writeToFile($lastrv, "rv".date("d.m.Y G.i.s"), "__stzimp.log");
         $conn = new \PDO('sqlsrv:Server='.STZ_serv.',4788;Database='.STZ_db.'', STZ_login, STZ_pwd);
 
         $sql = 'EXEC Local.InteropAcnt_ExportData '.$lastrv;
@@ -258,9 +258,9 @@ class ExportImport
                         "STAGE_ID",
                         "UF_*"
                     );
-                    $res = \CCrmDeal::GetList(Array(), $arFilter, $arSelect);
+                    $res = \CCrmDeal::GetListEx(Array(), $arFilter, $arSelect);
                     $arDeal = $res->fetch();
-
+                    \Bitrix\Main\Diag\Debug::writeToFile($arDeal, "массив".date("d.m.Y G.i.s"), "__stzimp.log");
                     if(Loader::includeModule('iblock') && $logib) {
                         $el = new \CIBlockElement;
                         if(empty($arDeal)) {
@@ -381,7 +381,7 @@ class ExportImport
                                     "STAGE_ID",
                                     "UF_*"
                                 );
-                                $resd = \CCrmDeal::GetList(Array(), $arFilter, $arSelect);
+                                $resd = \CCrmDeal::GetListEx(Array(), $arFilter, $arSelect);
                                 $updateddeals = [];
 
 
