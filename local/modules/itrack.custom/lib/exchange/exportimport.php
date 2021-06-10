@@ -258,7 +258,7 @@ class ExportImport
                         "STAGE_ID",
                         "UF_*"
                     );
-                    $res = \CCrmDeal::GetListEx(Array(), $arFilter, $arSelect);
+                    $res = \CCrmDeal::GetListEx(Array(), $arFilter, false, false, $arSelect);
                     $arDeal = $res->fetch();
                     \Bitrix\Main\Diag\Debug::writeToFile($arDeal, "массив".date("d.m.Y G.i.s"), "__stzimp.log");
                     if(Loader::includeModule('iblock') && $logib) {
@@ -381,7 +381,7 @@ class ExportImport
                                     "STAGE_ID",
                                     "UF_*"
                                 );
-                                $resd = \CCrmDeal::GetListEx(Array(), $arFilter, $arSelect);
+                                $resd = \CCrmDeal::GetListEx(Array(), $arFilter, false, false, $arSelect);
                                 $updateddeals = [];
 
 
