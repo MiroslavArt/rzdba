@@ -115,7 +115,7 @@ class ExportImport
         if($dataexport['ContractorID']) {
             $res = \CCrmCompany::GetListEx(
                 $arOrder = array(),
-                $arFilter = array('ID'=>$dataexport['ContractorID']),
+                $arFilter = array('ID'=>$dataexport['ContractorID'], "CHECK_PERMISSIONS"=>"N"),
                 $arGroupBy = false,
                 $arNavStartParams = false,
                 $arSelectFields = array('ID', 'ORIGIN_ID')
@@ -129,7 +129,7 @@ class ExportImport
         if($dataexport['ContainerOwnerID']) {
             $res = \CCrmCompany::GetListEx(
                 $arOrder = array(),
-                $arFilter = array('ID'=>$dataexport['ContainerOwnerID']),
+                $arFilter = array('ID'=>$dataexport['ContainerOwnerID'], "CHECK_PERMISSIONS"=>"N"),
                 $arGroupBy = false,
                 $arNavStartParams = false,
                 $arSelectFields = array('ID', 'ORIGIN_ID')
