@@ -187,7 +187,7 @@ class ExportImport
 
         $xml = $sxe->asXML();
         echo $xml;
-        \Bitrix\Main\Diag\Debug::writeToFile($xml, "xml", "__miros.log");
+        \Bitrix\Main\Diag\Debug::writeToFile($xml, "xml", "__stzexp.log");
 
         $sql = 'EXEC Local.InteropAcnt_ImportData @importData = ?';
 
@@ -200,12 +200,14 @@ class ExportImport
             $res = $st->execute();
             if(!$res) {
                 var_dump($st->errorInfo());
+                \Bitrix\Main\Diag\Debug::writeToFile($st->errorInfo(), "error1".date("d.m.Y G.i.s"), "__stzexp.log");
                 return "error";
             } else {
                 $result = $st->fetchAll();
                 if(empty($result)) {
                     return "added";
                 } else {
+                    \Bitrix\Main\Diag\Debug::writeToFile($result, "error2".date("d.m.Y G.i.s"), "__stzexp.log");
                     return "error";
                 }
                 //print_r($result);
