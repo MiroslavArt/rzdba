@@ -484,7 +484,11 @@ if($arParams['TYPE'] === 'list')
 		// itrack - перечисляем все маршруты
 
         //\Bitrix\Main\Diag\Debug::writeToFile($routesval, "route", "__miros.log");
-
+        if($arParams['GRID_ID_SUFFIX']) {
+            $gridtosiffix = $arParams['GRID_ID_SUFFIX'];
+        } else {
+            $gridtosiffix = 'PL';
+        }
 		$componentParams = array(
 			'DEAL_COUNT' => '20',
 			'PATH_TO_DEAL_LIST' => $arParams['PATH_TO_DEAL_LIST'],
@@ -506,25 +510,12 @@ if($arParams['TYPE'] === 'list')
 			'PATH_TO_DEAL_KANBANCATEGORY' => $arResult['PATH_TO_DEAL_KANBANCATEGORY'],
 			'PATH_TO_DEAL_CALENDARCATEGORY' => $arResult['PATH_TO_DEAL_CALENDARCATEGORY'],
 			//'GRID_ID_SUFFIX' => $arResult['CATEGORY_ID'] >= 0 ? "C_".$arResult['CATEGORY_ID'] : '',
-            'GRID_ID_SUFFIX' => 'PL',
+            'GRID_ID_SUFFIX' => $gridtosiffix,
             'CATEGORY_ID' => $arResult['CATEGORY_ID'],
-            //'INTERNAL_FILTER' => [ROUTE_UF => $routesval]
 		);
-
-        //$filterOptions = new \Bitrix\Main\UI\Filter\Options('CRM_DEAL_LIST_V12_PL', []);
-        //$arFilter = $filterOptions->getFilter();
-        //\Bitrix\Main\Diag\Debug::writeToFile($arFilter, "filteropt", "__miros.log");
-        //if(!$arFilter[ROUTE_UF]) {
-        //    $routesval = [];
-        //    $routeib = Utils::getIDIblockByCode(IBPL_ROUTE, IBPL_TYPE);
-        //    $routes = Utils::getIBlockElementsByConditions($routeib, ['ACTIVE'=>'Y']);
-        //    foreach($routes as $route) {
-        //        $routesval[] = $route['ID'];
-        //    }
-            //$componentParams['INTERNAL_FILTER'] = [ROUTE_UF => $routesval];
-        //}
-        //\Bitrix\Main\Diag\Debug::writeToFile($componentParams, "params", "__miros.log");
-
+        if($arParams['INTERNAL_FILTER']) {
+            $componentParams['INTERNAL_FILTER'] = $arParams['INTERNAL_FILTER'];
+        }
 
 
 		if (isset($_REQUEST['WG']) && mb_strtoupper($_REQUEST['WG']) === 'Y')
