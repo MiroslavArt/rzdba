@@ -301,7 +301,7 @@ class ExportImport
                             }
 
                             if($elementatr['Dfe'] && $arDeal[STZ_DFE_UF]!=$elementatr['Dfe']) {
-                                $arParams = array_merge($arParams, [STZ_DFE_UF => preg_replace("/[^\d]/", '', $elementatr['Dfe'])]);
+                                $arParams = array_merge($arParams, [STZ_DFE_UF => $elementatr['Dfe']]);
                             }
 
                             if($elementatr['ContainerIssueDate'] && strtotime($arDeal[STZ_vyd_UF])!=strtotime($elementatr['ContainerIssueDate'])) {
@@ -317,7 +317,7 @@ class ExportImport
                             }
 
                             if($elementatr['Amount'] && $arDeal[STZ_cash_UF]!=$elementatr['Amount']) {
-                                $arParams = array_merge($arParams, [STZ_cash_UF => preg_replace("/[^\d]/", '', $elementatr['Amount'])]);
+                                $arParams = array_merge($arParams, [STZ_cash_UF => $elementatr['Amount']]);
                             }
 
                             if($elementatr['DocStateName'] && $arDeal[STZ_status_UF]!=$stagestz['ID']) {
@@ -423,7 +423,7 @@ class ExportImport
                                     }
 
                                     if($elementatr['Amount'] && $arCopydeal[STZ_cash_UF]!=$elementatr['Amount']) {
-                                        $arParams = array_merge($arParams, [STZ_cash_UF => preg_replace("/[^\d]/", '', $elementatr['Amount'])]);
+                                        $arParams = array_merge($arParams, [STZ_cash_UF => $elementatr['Amount']]);
                                     }
 
                                     if(array_key_exists('ShippingType', $elementatr)) {
