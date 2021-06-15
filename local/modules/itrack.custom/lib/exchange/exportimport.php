@@ -320,7 +320,7 @@ class ExportImport
                                 $arParams = array_merge($arParams, [STZ_cash_UF => $elementatr['Amount']]);
                             }
 
-                            if($elementatr['DocStateName'] && $arDeal[STZ_status_UF]!=$stagestz['ID']) {
+                            if($elementatr['DocStateName'] && $stagestz && $arDeal[STZ_status_UF]!=$stagestz['ID']) {
                                 $arParams = array_merge($arParams, [STZ_status_UF => $stagestz['ID']]);
                             }
                             if(array_key_exists('ShippingType', $elementatr)) {
@@ -434,11 +434,11 @@ class ExportImport
                                         }
                                     }
 
-                                    if($elementatr['DocStateName'] && $arCopydeal[STZ_status_UF]!=$stagestz['ID']) {
+                                    if($elementatr['DocStateName'] && $stagestz && $arCopydeal[STZ_status_UF]!=$stagestz['ID']) {
                                         $arParams = array_merge($arParams, [STZ_status_UF => $stagestz]);
                                     }
 
-                                    if($elementatr['DocStateName'] && $arCopydeal['STAGE_ID']!=$stagestz['PROPERTIES']['KOD_ETAPA_SDELKI']['VALUE']) {
+                                    if($elementatr['DocStateName'] && $stagestz && $arCopydeal['STAGE_ID']!=$stagestz['PROPERTIES']['KOD_ETAPA_SDELKI']['VALUE']) {
                                         $arParams = array_merge($arParams, ['STAGE_ID' => $stagestz['PROPERTIES']['KOD_ETAPA_SDELKI']['VALUE']]);
                                     }
                                     if($arParams) {
