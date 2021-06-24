@@ -2,17 +2,21 @@ BX.namespace('iTrack.Crm.DetailEditorExt');
 
 BX.iTrack.Crm.DetailEditorExt = {
     listFields: [
-        'UF_CRM_1606230321',
-        'UF_CRM_1606230395',
-        'UF_CRM_1619604580',
-        'UF_CRM_1619604659',
-        'UF_CRM_1619604763',
-        'UF_CRM_1619612517',
-        'UF_CRM_1619612557',
-        'UF_CRM_1619612608',
-        'UF_CRM_1619612651',
-        'UF_CRM_1619614028',
-        'UF_CRM_1619614056'
+        'UF_CRM_1620301344',
+        'UF_CRM_1620301388',
+        'UF_CRM_1620301433',
+        'UF_CRM_1620301455',
+        'UF_CRM_1622644345',
+        'UF_CRM_1620301475',
+        'UF_CRM_1620301501',
+        'UF_CRM_1622644455',
+        'UF_CRM_1620301525',
+        'UF_CRM_1622642147',
+        'UF_CRM_1622642485',
+        'UF_CRM_1622644345',
+        'UF_CRM_1622644455',
+        'UF_CRM_1622015320',
+        'UF_CRM_1619604763'
     ],
     init: function () {
         BX.addCustomEvent('BX.UI.EntityEditorField:onLayout', BX.delegate(this.fieldLayoutHandler, this));
