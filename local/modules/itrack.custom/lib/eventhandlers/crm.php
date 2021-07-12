@@ -11,6 +11,32 @@ class Crm
     public static function onBeforeCrmDealUpdate(&$arFields)
     {
         if (\Bitrix\Main\Loader::includeModule('crm')) {
+            if($arFields['COMPANY_ID']) {
+                $requisite = new \Bitrix\Crm\EntityRequisite();
+                $rs = $requisite->getList([
+                    "filter" => ["ENTITY_ID" => $arFields['COMPANY_ID'], "ENTITY_TYPE_ID" => \CCrmOwnerType::Company,
+                    ]
+                ]);
+                $reqData = $rs->fetch();
+                if(!$reqData || !$reqData['RQ_INN']) {
+                    \Bitrix\Main\Loader::includeModule('im');
+                    $arFieldschat = array(
+                        "MESSAGE_TYPE" => "S", # P - private chat, G - group chat, S - notification
+                        "TO_USER_ID" => $arFields['CREATED_BY_ID'],
+                        "FROM_USER_ID" => 1,
+                        "MESSAGE" => "Невозможно привязать компанию к сделке, так как в ней не заполнено поле ИНН. ",
+                        "AUTHOR_ID" => 1
+
+                    );
+                    \CIMMessenger::Add($arFieldschat);
+                    $arFields['COMPANY_ID'] = "";
+
+                }
+            }
+        }
+
+
+        if (\Bitrix\Main\Loader::includeModule('crm')) {
             if($arFields[DEPARTURE_UF] && !$arFields[ARRIVAL_UF]) {
                 $foundf = ARRIVAL_UF;
             } elseif(!$arFields[DEPARTURE_UF] && $arFields[ARRIVAL_UF]) {
@@ -35,6 +61,32 @@ class Crm
 
     public static function onBeforeCrmDealAdd(&$arFields)
     {
+        if (\Bitrix\Main\Loader::includeModule('crm')) {
+            if($arFields['COMPANY_ID']) {
+                $requisite = new \Bitrix\Crm\EntityRequisite();
+                $rs = $requisite->getList([
+                    "filter" => ["ENTITY_ID" => $arFields['COMPANY_ID'], "ENTITY_TYPE_ID" => \CCrmOwnerType::Company,
+                    ]
+                ]);
+                $reqData = $rs->fetch();
+                if(!$reqData || !$reqData['RQ_INN']) {
+                    \Bitrix\Main\Loader::includeModule('im');
+                    $arFieldschat = array(
+                        "MESSAGE_TYPE" => "S", # P - private chat, G - group chat, S - notification
+                        "TO_USER_ID" => $arFields['CREATED_BY_ID'],
+                        "FROM_USER_ID" => 1,
+                        "MESSAGE" => "Невозможно привязать компанию к сделке, так как в ней не заполнено поле ИНН. ",
+                        "AUTHOR_ID" => 1
+
+                    );
+                    \CIMMessenger::Add($arFieldschat);
+                    $arFields['COMPANY_ID'] = "";
+
+                }
+            }
+        }
+
+
         if($arFields[DEPARTURE_UF] && $arFields[ARRIVAL_UF]) {
             $routeid = self::actualiseRoute($arFields[DEPARTURE_UF], $arFields[ARRIVAL_UF]);
             if(intval($routeid) > 0) {
